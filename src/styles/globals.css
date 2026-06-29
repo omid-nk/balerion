@@ -1,0 +1,54 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-yekan: var(--font-yekan);
+  --font-morabba: var(--font-morabba);
+
+  --color-primary: oklch(50.8% 0.118 165.612);
+  --color-secondary: oklch(64.6% 0.222 41.116);
+
+  --color-dark: oklch(21% 0.006 285.885);
+  --color-darker: oklch(14.1% 0.005 285.823);
+  --color-light: oklch(96.7% 0.001 286.375);
+  --color-lighter: oklch(98.5% 0 0);
+
+  --color-warning: oklch(50.5% 0.213 27.518);
+  --color-alert: oklch(68.1% 0.162 75.834);
+  --color-success: oklch(53.2% 0.157 131.589);
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f100;
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(50.8% 0.118 165.612);
+}
+
+/* swiper pagination  */
+.swiper-pagination {
+  bottom: -18px !important;
+  padding-bottom: 10px !important;
+  margin: 0 !important;
+}
+.swiper-pagination-bullet {
+  background: #ccc !important;
+  width: 12px !important;
+  height: 2px !important;
+  opacity: 0.6 !important;
+  transition: all 0.3s ease !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+.swiper-pagination-bullet-active {
+  background: var(--color-secondary) !important;
+  width: 12px !important;
+  height: 2px !important;
+  opacity: 1 !important;
+  transform: scale(1.1) !important;
+  margin: 0 !important;
+}
