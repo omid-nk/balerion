@@ -21,7 +21,7 @@ export default function FooterNewsletter() {
   };
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+    <div className="rounded-2xl sm:border border-white/10 sm:bg-white/5 sm:p-5 sm:backdrop-blur-xl">
       {/* HEADER */}
       <div className="mb-4 flex items-center gap-2">
         <LuMail className="text-primary" />
@@ -29,17 +29,17 @@ export default function FooterNewsletter() {
       </div>
 
       <p className="text-light/60 mb-4 text-sm leading-6">
-        جدیدترین دوره‌ها، مقالات و نکات برنامه‌نویسی رو دریافت کن.
+        جدیدترین دوره‌ها، مقالات و نکات برنامه‌‌نویسی رو دریافت کن.
       </p>
 
       {/* FORM */}
-      <form onSubmit={handleSubmit} className="flex gap-2">
+      <form onSubmit={handleSubmit} className="flex gap-1.5 ">
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="ایمیل خود را وارد کنید"
-          className="focus:border-primary/40 flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40"
+          className="focus:border-primary/40 sm:flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40 placeholder:text-sm "
         />
 
         <button

@@ -208,7 +208,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-blue-600 py-3 text-white"
+              className="mt-2 w-full rounded-xl bg-primary cursor-pointer py-3 font-medium text-white shadow-lg transition hover:bg-primary/90 disabled:opacity-60"
             >
               {loading ? "در حال ثبت..." : "ثبت نام"}
             </button>
@@ -241,7 +241,7 @@ export default function RegisterPage() {
 
         <div className="mt-6 text-center text-sm text-zinc-500">
           قبلاً ثبت‌نام کردی؟{" "}
-          <Link href="/login" className="text-blue-600">
+          <Link href="/login" className="text-primary ">
             ورود
           </Link>
         </div>

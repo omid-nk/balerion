@@ -46,7 +46,7 @@ export default function NavItems() {
       </li>
 
       <li>
-        <Link href="/" className="hover:text-primary transition-colors">
+        <Link href="/mags" className="hover:text-primary transition-colors">
           مقالات
         </Link>
       </li>

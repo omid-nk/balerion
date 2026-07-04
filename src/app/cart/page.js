@@ -1,18 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { LuBrackets, LuTrash2 } from "react-icons/lu";
+import { AnimatePresence, LayoutGroup } from "framer-motion";
+import toast from "react-hot-toast";
 
-import { getCart, removeFromCart, subscribeToCartChanges } from "@/lib/cart";
 import { createClient } from "@/lib/supabase/client";
 
+import { getCart, removeFromCart, subscribeToCartChanges } from "@/lib/cart";
+
+import CartItem from "@/components/modules/cart/CartItem";
+import CheckoutCard from "@/components/modules/cart/CheckoutCard";
+import CartSkeleton from "@/components/modules/cart/CartSkeleton";
+import EmptyCart from "@/components/modules/cart/EmptyCart";
+
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState([]);
+  const supabase = createClient();
+
   const [loading, setLoading] = useState(true);
 
-  const supabase = createClient();
+  const [cartItems, setCartItems] = useState([]);
+  const [removingIds, setRemovingIds] = useState([]);
 
   const loadCart = async () => {
     setLoading(true);
@@ -27,7 +34,15 @@ export default function CartPage() {
 
     const { data, error } = await supabase
       .from("courses")
-      .select("id, name, slug, cover_url, price")
+      .select(
+        `
+        id,
+        name,
+        slug,
+        cover_url,
+        price
+      `,
+      )
       .in("id", ids);
 
     if (error) {
@@ -44,6 +59,7 @@ export default function CartPage() {
     );
 
     setCartItems(orderedItems);
+
     setLoading(false);
   };
 
@@ -54,8 +70,25 @@ export default function CartPage() {
   }, []);
 
   const handleRemove = (id) => {
-    removeFromCart(id);
-    loadCart();
+    if (removingIds.includes(id)) return;
+
+    setRemovingIds((prev) => [...prev, id]);
+
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+
+    setTimeout(() => {
+      removeFromCart(id);
+
+      setRemovingIds((prev) => prev.filter((item) => item !== id));
+
+      loadCart();
+
+      toast.success("دوره از سبد خرید حذف شد.");
+    }, 350);
+  };
+
+  const handleCheckout = () => {
+    toast.error("در حال حاضر پرداخت غیرفعال است.");
   };
 
   const totalPrice = cartItems.reduce(
@@ -63,87 +96,51 @@ export default function CartPage() {
     0,
   );
 
-  const isEmpty = !loading && cartItems.length === 0;
-
   if (loading) {
-    return (
-      <div className="my-20 text-center text-gray-500">در حال بارگذاری...</div>
-    );
+    return <CartSkeleton />;
   }
 
-  if (isEmpty) {
-    return (
-      <section className="my-12 flex flex-col items-center justify-center gap-2 rounded-3xl border px-6 py-16 text-center">
-        <LuBrackets className="text-primary mb-2 text-5xl" />
-        <h2 className="text-lg font-bold">سبد خرید شما خالی است</h2>
-      </section>
-    );
+  if (!cartItems.length) {
+    return <EmptyCart />;
   }
 
   return (
     <section className="my-10">
-      <h1 className="mb-8 text-2xl font-bold">سبد خرید</h1>
+      <div className="mb-10">
+        <h1 className="text-3xl font-bold">سبد خرید</h1>
 
-      <div className="flex flex-col gap-6 lg:flex-row">
-        {/* Products */}
-        <div className="flex-1 space-y-4">
-          {cartItems.map((course) => (
-            <div key={course.id} className="flex gap-4 rounded-3xl border p-4">
-              <Link href={`/course/${course.slug}`}>
-                <Image
-                  src={course.cover_url}
-                  width={180}
-                  height={100}
-                  alt={course.name}
-                  className="h-28 w-44 rounded-2xl object-cover"
-                />
-              </Link>
-
-              <div className="flex flex-1 flex-col justify-between">
-                <Link href={`/course/${course.slug}`} className="font-bold">
-                  {course.name}
-                </Link>
-
-                <div className="flex justify-between">
-                  <span>
-                    {Number(course.price) === 0
-                      ? "رایگان"
-                      : `${course.price.toLocaleString()} تومان`}
-                  </span>
-
-                  <button
-                    onClick={() => handleRemove(course.id)}
-                    className="text-red-500"
-                  >
-                    <LuTrash2 />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Checkout */}
-        <aside className="lg:w-96">
-          <div className="rounded-3xl border p-6">
-            <h3 className="mb-6 font-bold">خلاصه سفارش</h3>
-
-            <div className="flex justify-between">
-              <span>تعداد</span>
-              <span>{cartItems.length}</span>
-            </div>
-
-            <div className="mt-2 flex justify-between font-bold">
-              <span>قابل پرداخت</span>
-              <span>{totalPrice.toLocaleString()} تومان</span>
-            </div>
-
-            <button className="bg-primary text-light mt-6 w-full rounded-2xl py-4">
-              ادامه پرداخت
-            </button>
-          </div>
-        </aside>
+        <p className="mt-2 opacity-70">
+          دوره‌های انتخاب شده را بررسی و پرداخت کنید.
+        </p>
       </div>
+
+      <LayoutGroup>
+        <div className="flex flex-col gap-8 lg:flex-row">
+          {/* Left */}
+
+          <div className="flex-1 gap-4 flex flex-col">
+            <AnimatePresence mode="popLayout">
+              {cartItems.map((course) => (
+                <CartItem
+                  key={course.id}
+                  course={course}
+                  onRemove={handleRemove}
+                  isRemoving={removingIds.includes(course.id)}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+
+          {/* Right */}
+          <div className="lg:w-96">
+            <CheckoutCard
+              cartItems={cartItems}
+              totalPrice={totalPrice}
+              onCheckout={handleCheckout}
+            />
+          </div>
+        </div>
+      </LayoutGroup>
     </section>
   );
 }

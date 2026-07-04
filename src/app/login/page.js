@@ -65,7 +65,7 @@ export default function LoginPage() {
         password: "",
       });
 
-      router.push("/panel");
+      router.push("/");
       router.refresh();
     } catch (err) {
       console.error("LOGIN ERROR:", err);
@@ -137,7 +137,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 w-full rounded-xl bg-primary py-3 font-medium text-white shadow-lg transition hover:bg-primary/90 disabled:opacity-60"
+            className="mt-2 w-full rounded-xl bg-primary cursor-pointer py-3 font-medium text-white shadow-lg transition hover:bg-primary/90 disabled:opacity-60"
           >
             {loading ? "در حال ورود..." : "ورود"}
           </button>

@@ -7,7 +7,7 @@ const links = [
   },
   {
     title: "شروع برنامه‌نویسی",
-    href: "/start-programming",
+    href: "/courses",
   },
   {
     title: "مقالات",

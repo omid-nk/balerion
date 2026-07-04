@@ -32,8 +32,15 @@ export default function YourComments() {
       <div className="relative sm:mx-4">
         <Swiper className="my-6" {...swiperParams}>
           {comments.map((item) => {
-            const stars = Array.from({ length: item.star }, (_, i) => (
-              <LuStar key={i} className="text-yellow-600" />
+            const stars = Array.from({ length: 5 }, (_, i) => (
+              <LuStar
+                key={i}
+                className={`h-3 w-3 ${
+                  i < item.star
+                    ? "fill-yellow-500 text-yellow-500"
+                    : "fill-transparent text-zinc-300 dark:text-zinc-600"
+                }`}
+              />
             ));
 
             return (

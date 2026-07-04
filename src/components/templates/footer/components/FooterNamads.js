@@ -2,31 +2,31 @@ import Image from "next/image";
 
 export default function FooterNamads() {
   return (
-    <div className="mt-6 flex gap-3">
-      <div className="bg-light rounded-xl p-2">
+    <div className="mt-4 flex gap-0.5">
+      <div className="bg-light p-1.5">
         <Image
           src="/images/namads/e-namad.png"
           alt="e-namad"
-          width={70}
-          height={70}
+          width={60}
+          height={60}
         />
       </div>
 
-      <div className="bg-light rounded-xl p-2">
+      <div className="bg-light p-1.5">
         <Image
           src="/images/namads/namad-zarinpal.png"
           alt="zarinpal"
-          width={70}
-          height={70}
+          width={60}
+          height={60}
         />
       </div>
 
-      <div className="bg-light rounded-xl p-2">
+      <div className="bg-light p-1.5">
         <Image
           src="/images/namads/namad-zibal.png"
           alt="zibal"
-          width={70}
-          height={70}
+          width={60}
+          height={60}
         />
       </div>
     </div>

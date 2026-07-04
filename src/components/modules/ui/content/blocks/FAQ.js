@@ -6,8 +6,8 @@ export default function FAQ({ block }) {
           key={i}
           className="border-dark/20 dark:border-light/20 rounded-xl border p-4"
         >
-          <p className="font-semibold">{item.q}</p>
-          <p className="text-sm">{item.a}</p>
+          <p className="font-semibold">{item.question}</p>
+          <p className="text-sm text-zinc-400 mt-2">{item.answer}</p>
         </div>
       ))}
     </div>

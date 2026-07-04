@@ -8,7 +8,7 @@ import FooterBottom from "./components/FooterBottom";
 export default function Footer() {
   return (
     <footer className="bg-dark text-light mt-16 mb-8 overflow-hidden rounded-3xl">
-      <div className="mx-auto max-w-7xl px-6 pt-12 pb-2">
+      <div className="mx-auto max-w-7xl sm:px-6 pt-12 pb-2">
         {/* MAIN GRID */}
         <div className="grid gap-12 lg:grid-cols-2 lg:divide-x lg:divide-white/10">
           {/* LEFT SIDE */}
