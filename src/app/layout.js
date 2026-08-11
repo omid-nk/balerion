@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
       dir="rtl"
       className={`${yekan.variable} ${morabba.variable} dark`}
     >
-      <body className="bg-lighter text-dark font-yekan dark:bg-darker dark:text-light mx-auto min-h-dvh max-w-7xl px-4 select-none sm:px-6 md:px-10 lg:px-8 xl:px-6 2xl:px-0">
+      <body className="bg-dark/5 text-dark font-yekan dark:bg-darker dark:text-light mx-auto min-h-dvh max-w-7xl px-4 select-none sm:px-6 md:px-10 lg:px-8 xl:px-6 2xl:px-0">
         <ThemeProvider>
           <ToastProviders>
             <ScrollToTop />

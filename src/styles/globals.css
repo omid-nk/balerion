@@ -10,8 +10,8 @@
 
   --color-dark: oklch(21% 0.006 285.885);
   --color-darker: oklch(14.1% 0.005 285.823);
-  --color-light: oklch(96.7% 0.001 286.375);
-  --color-lighter: oklch(98.5% 0 0);
+  --color-light: oklch(96.8% 0.007 247.896);
+  --color-lighter: oklch(98.4% 0.003 247.858);
 
   --color-warning: oklch(50.5% 0.213 27.518);
   --color-alert: oklch(68.1% 0.162 75.834);

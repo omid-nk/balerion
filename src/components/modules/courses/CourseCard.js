@@ -13,8 +13,8 @@ export default function CourseCard({ course }) {
         <Image
           src={course.cover_url}
           alt={course.name}
-          width={220}
-          height={120}
+          width={600}
+          height={400}
           className="w-full rounded-t-xl rounded-b-4xl transition-all group-hover:brightness-140"
         />
       </div>
