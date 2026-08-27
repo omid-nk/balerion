@@ -104,7 +104,7 @@ export default function HeroSection() {
       {/* Left */}
       <div className="max-w-xs sm:max-w-sm md:max-w-lg">
         <Image
-          src={"/images/home/young-man.webp"}
+          src={"/images/home/man-coding.png"}
           width={800}
           height={0}
           alt="hero section image"
