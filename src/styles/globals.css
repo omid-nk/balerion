@@ -1,1 +1,29 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-yekan: var(--font-yekan);
+  --font-morabba: var(--font-morabba);
+
+  --color-primary: oklch(54.6% 0.245 262.881);
+  --color-secondary: oklch(64.6% 0.222 41.116);
+  --color-dark: oklch(21% 0.006 285.885);
+  --color-light: oklch(96.7% 0.001 286.375);
+  --color-background-dark: oklch(14.1% 0.005 285.823);
+  --color-background-light: oklch(92.3% 0.003 48.717);
+  --color-border: oklch(44.615% 0.02988 257.711 / 0.25);
+  --color-warning: oklch(50.5% 0.213 27.518);
+  --color-alert: oklch(68.1% 0.162 75.834);
+  --color-success: oklch(53.2% 0.157 131.589);
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f100;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+}

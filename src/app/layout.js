@@ -1,3 +1,5 @@
+import { yekan } from "@/fonts/yekan";
+import { morabba } from "@/fonts/morabba";
 import "@/styles/globals.css";
 
 export const metadata = {
@@ -7,8 +9,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={``}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html
+      lang="fa"
+      dir="rtl"
+      className={`${yekan.variable} ${morabba.variable} `}
+    >
+      <body className="bg-background-light text-dark dark:bg-background-dark dark:text-light font-yekan">
+        {children}
+      </body>
     </html>
   );
 }
