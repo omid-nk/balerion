@@ -137,7 +137,7 @@ export default function Header() {
                 {/* Menu Header */}
 
                 <div className="border-border flex items-center justify-between border-b pb-4">
-                  <Logo width={100} height={70} />
+                  <Logo />
 
                   <button
                     type="button"

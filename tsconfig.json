@@ -30,7 +30,8 @@
     "**/*.ts",
     "**/*.tsx",
     "src/app/loading.js",
-    "src/components/shared/SearchBar.js"
+    "src/components/shared/SearchBar.js",
+    "src/lib/supabase/client.js"
   ],
   "exclude": ["node_modules"]
 }
