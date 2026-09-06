@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
     <html
       lang="fa"
       dir="rtl"
-      className={`${yekan.variable} ${morabba.variable} `}
+      className={`${yekan.variable} ${morabba.variable} dark`}
     >
       <body className="bg-background-light text-dark dark:bg-background-dark dark:text-light font-yekan mx-auto max-w-7xl px-3 sm:px-6 xl:px-3">
         <Header />
