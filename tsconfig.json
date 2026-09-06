@@ -39,7 +39,8 @@
     "src/components/home/StudentComments.js",
     "src/components/shared/ThemeToggle.js",
     "src/components/shared/Newsletter.js",
-    "src/providers/ThemeProvider.js"
+    "src/providers/ThemeProvider.js",
+    "src/components/course/CourseGrid.js"
   ],
   "exclude": ["node_modules"]
 }
