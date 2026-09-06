@@ -13,9 +13,10 @@ export default function TitleHeading({
     <div className="mb-6 flex flex-wrap items-center justify-between gap-6 select-none">
       {!linkHref && <span className="border-border flex-1 border-b" />}
 
-      <h2 className="font-morabba text-xl md:text-2xl">
+      <h2 className="font-morabba relative block text-xl md:text-2xl">
         {remainingTitle && `${remainingTitle} `}
         <span className="text-primary">{lastWord}</span>
+        <span className="bg-primary/15 dark:bg-primary/20 absolute top-0 right-0 bottom-0 left-0 -z-10 block blur-xl" />
       </h2>
 
       <span className="border-border flex-1 border-b" />

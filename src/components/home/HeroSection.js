@@ -43,7 +43,7 @@ export default function HeroSection() {
       </div>
 
       {/* Image */}
-      <div className="max-w-xs sm:max-w-sm md:max-w-lg">
+      <div className="relative max-w-xs sm:max-w-sm md:max-w-lg">
         <Image
           src="/images/home/man-coding.png"
           width={800}
@@ -52,6 +52,7 @@ export default function HeroSection() {
           className="h-full object-cover"
           loading="lazy"
         />
+        <span className="dark:bg-primary/10 bg-primary/20 absolute top-0 right-0 bottom-0 left-0 -z-10 block blur-3xl" />
       </div>
     </section>
   );
