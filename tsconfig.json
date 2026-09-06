@@ -35,7 +35,11 @@
     "src/components/home/CategoriesListClient.js",
     "src/components/home/CategoriesListServer.js",
     "src/components/shared/TitleHeading.js",
-    "src/components/home/SocialPromote.js"
+    "src/components/home/SocialPromote.js",
+    "src/components/home/StudentComments.js",
+    "src/components/shared/ThemeToggle.js",
+    "src/components/shared/Newsletter.js",
+    "src/providers/ThemeProvider.js"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,0 +1,84 @@
+"use client";
+
+import Image from "next/image";
+import { LuStar } from "react-icons/lu";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import "swiper/css";
+
+import yourCommentsData from "@/data/yourCommentsData.json";
+
+import TitleHeading from "../shared/TitleHeading";
+
+export default function StudentComments() {
+  const comments = yourCommentsData.yourCommentsData;
+
+  return (
+    <section className="select-none">
+      {/* Header */}
+      <TitleHeading title="نظرات دانشجو‌ها" />
+
+      {/* Body */}
+      <div className="relative sm:mx-4">
+        <Swiper
+          className=""
+          loop
+          slidesPerView={1}
+          breakpoints={{
+            600: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+          }}
+        >
+          {comments.map((item) => {
+            const stars = Array.from({ length: 5 }, (_, i) => (
+              <LuStar
+                key={i}
+                className={`h-3 w-3 ${
+                  i < item.star
+                    ? "fill-yellow-500 text-yellow-500"
+                    : "fill-transparent text-zinc-300 dark:text-zinc-600"
+                }`}
+              />
+            ));
+
+            return (
+              <SwiperSlide className="w-full" key={item.id}>
+                <div className="dark:bg-dark bg-light mx-3 flex min-h-44 flex-col justify-between rounded-lg p-3 text-xs">
+                  <div className="p-1 pb-6">
+                    <p className="line-clamp-3 text-xs/relaxed">{item.desc}</p>
+                  </div>
+
+                  <div className="border-border flex flex-wrap items-center justify-between gap-y-4 border-t pt-4">
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src={item.avatar}
+                        alt={item.name}
+                        width={40}
+                        height={40}
+                        className="to-primary h-10 w-10 rounded-full bg-linear-to-br from-blue-900 object-cover"
+                      />
+
+                      <div>
+                        <p className="mb-1 font-bold">{item.name}</p>
+
+                        <div className="flex items-center gap-0.5">{stars}</div>
+                      </div>
+                    </div>
+
+                    <div className="bg-dark/5 dark:bg-light/5 rounded-sm px-2 py-1">
+                      <p>دانشجوی {item.coursesOwn} دوره</p>
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
+    </section>
+  );
+}
