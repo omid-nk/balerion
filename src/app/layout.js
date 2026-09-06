@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
       dir="rtl"
       className={`${yekan.variable} ${morabba.variable} `}
     >
-      <body className="bg-background-light text-dark dark:bg-background-dark dark:text-light font-yekan mx-auto max-w-7xl px-3 sm:px-6 xl:px-3">
+      <body className="bg-background-light text-dark dark:bg-background-dark dark:text-light font-yekan mx-auto flex min-h-dvh max-w-7xl flex-col justify-between px-3 sm:px-6 xl:px-3">
         <ThemeProvider>
           <Header />
           {children}

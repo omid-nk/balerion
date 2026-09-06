@@ -42,7 +42,10 @@
     "src/providers/ThemeProvider.js",
     "src/components/course/CourseGrid.js",
     "src/components/home/LastProducts.js",
-    "src/components/home/FreeProducts.js"
+    "src/components/home/FreeProducts.js",
+    "src/components/course/CoursesPageHeader.js",
+    "src/components/shared/Breadcrumb.js",
+    "src/components/course/CoursesPageFilters.js"
   ],
   "exclude": ["node_modules"]
 }
