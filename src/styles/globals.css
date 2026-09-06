@@ -27,3 +27,27 @@
 ::-webkit-scrollbar-thumb {
   background: var(--color-primary);
 }
+
+/* swiper pagination  */
+.swiper-pagination {
+  bottom: -18px !important;
+  padding-bottom: 10px !important;
+  margin: 0 !important;
+}
+.swiper-pagination-bullet {
+  background: #ccc !important;
+  width: 12px !important;
+  height: 2px !important;
+  opacity: 0.6 !important;
+  transition: all 0.3s ease !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+.swiper-pagination-bullet-active {
+  background: var(--color-secondary) !important;
+  width: 12px !important;
+  height: 2px !important;
+  opacity: 1 !important;
+  transform: scale(1.1) !important;
+  margin: 0 !important;
+}

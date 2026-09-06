@@ -31,7 +31,10 @@
     "**/*.tsx",
     "src/app/loading.js",
     "src/components/shared/SearchBar.js",
-    "src/lib/supabase/client.js"
+    "src/lib/supabase/client.js",
+    "src/components/home/CategoriesListClient.js",
+    "src/components/home/CategoriesListServer.js",
+    "src/components/shared/TitleHeading.js"
   ],
   "exclude": ["node_modules"]
 }
