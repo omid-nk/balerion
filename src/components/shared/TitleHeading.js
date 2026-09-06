@@ -16,7 +16,7 @@ export default function TitleHeading({
       <h2 className="font-morabba relative block text-xl md:text-2xl">
         {remainingTitle && `${remainingTitle} `}
         <span className="text-primary">{lastWord}</span>
-        <span className="bg-primary/15 dark:bg-primary/20 absolute top-0 right-0 bottom-0 left-0 -z-10 block blur-xl" />
+        <span className="bg-primary/20 dark:bg-primary/15 absolute top-0 right-0 bottom-0 left-0 -z-10 block blur-lg" />
       </h2>
 
       <span className="border-border flex-1 border-b" />
