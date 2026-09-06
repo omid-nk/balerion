@@ -29,7 +29,8 @@
     "**/*.mts",
     "**/*.ts",
     "**/*.tsx",
-    "src/app/loading.js"
+    "src/app/loading.js",
+    "src/components/shared/SearchBar.js"
   ],
   "exclude": ["node_modules"]
 }
