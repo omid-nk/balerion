@@ -45,7 +45,8 @@
     "src/components/home/FreeProducts.js",
     "src/components/course/CoursesPageHeader.js",
     "src/components/shared/Breadcrumb.js",
-    "src/components/course/CoursesPageFilters.js"
+    "src/components/course/CoursesPageFilters.js",
+    "src/components/shared/ContentRenderer.js"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,0 +1,154 @@
+.tiptap-content {
+  direction: rtl;
+  text-align: right;
+  font-family: var(--font-yekan);
+  line-height: 2;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.tiptap-content h1,
+.tiptap-content h2,
+.tiptap-content h3,
+.tiptap-content h4 {
+  font-family: var(--font-morabba);
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.tiptap-content h1 {
+  font-size: 1.5rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.tiptap-content h2 {
+  font-size: 1.25rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.tiptap-content h3 {
+  font-size: 1.125rem;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.tiptap-content h4 {
+  font-size: 1rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.tiptap-content p {
+  margin: 0.6rem 0;
+}
+
+.tiptap-content ul,
+.tiptap-content ol {
+  padding-right: 1.25rem;
+  margin: 0.75rem 0;
+}
+
+.tiptap-content ul {
+  list-style: disc;
+}
+
+.tiptap-content ol {
+  list-style: decimal;
+}
+
+.tiptap-content blockquote {
+  border-right: 3px solid var(--color-primary);
+  padding-right: 0.75rem;
+  margin: 1.25rem 0;
+  opacity: 0.8;
+}
+
+.tiptap-content pre {
+  direction: ltr;
+  text-align: left;
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  margin: 1.25rem 0;
+  background: var(--color-background-dark);
+  color: var(--color-light);
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+
+.tiptap-content code {
+  direction: ltr;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.tiptap-content hr {
+  margin: 1.5rem 0;
+  border-color: color-mix(in oklch, var(--color-primary) 30%, transparent);
+}
+
+/* Tablet */
+@media (min-width: 640px) {
+  .tiptap-content h1 {
+    font-size: 1.75rem;
+    margin: 1.75rem 0 1rem;
+  }
+
+  .tiptap-content h2 {
+    font-size: 1.375rem;
+  }
+
+  .tiptap-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .tiptap-content pre {
+    padding: 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .tiptap-content h1 {
+    font-size: 2rem;
+    margin: 2rem 0 1rem;
+  }
+
+  .tiptap-content h2 {
+    font-size: 1.5rem;
+    margin: 1.75rem 0 0.75rem;
+  }
+
+  .tiptap-content h3 {
+    font-size: 1.25rem;
+    margin: 1.5rem 0 0.75rem;
+  }
+
+  .tiptap-content p {
+    margin: 0.75rem 0;
+  }
+
+  .tiptap-content ul,
+  .tiptap-content ol {
+    padding-right: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .tiptap-content blockquote {
+    border-right-width: 4px;
+    padding-right: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .tiptap-content pre {
+    padding: 1rem;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+  }
+
+  .tiptap-content hr {
+    margin: 2rem 0;
+  }
+}
