@@ -9,37 +9,105 @@ export default function AnimatedWords() {
   const [wordIndex, setWordIndex] = useState(0);
   const [displayed, setDisplayed] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isFixing, setIsFixing] = useState(false);
 
   const currentWord = words[wordIndex];
 
   useEffect(() => {
-    const typingSpeed = isDeleting ? 60 : 120;
+    let timeout;
 
-    const timeout = setTimeout(() => {
-      if (!isDeleting) {
-        const nextText = currentWord.slice(0, displayed.length + 1);
+    const randomDelay = (min, max) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
 
-        setDisplayed(nextText);
+    // --------------------------------
+    // Typing
+    // --------------------------------
+    if (!isDeleting && !isFixing) {
+      timeout = setTimeout(
+        () => {
+          const shouldMakeMistake =
+            displayed.length > 1 &&
+            displayed.length < currentWord.length - 1 &&
+            Math.random() < 0.13;
 
-        if (nextText === currentWord) {
-          setTimeout(() => {
-            setIsDeleting(true);
-          }, 1000);
-        }
-      } else {
-        const nextText = currentWord.slice(0, displayed.length - 1);
+          // Make a random typo
+          if (shouldMakeMistake) {
+            const mistakes = [
+              "ا",
+              "ب",
+              "پ",
+              "ت",
+              "ج",
+              "د",
+              "ر",
+              "س",
+              "ش",
+              "ک",
+              "ل",
+              "م",
+              "ن",
+              "و",
+              "ی",
+            ];
 
-        setDisplayed(nextText);
+            const randomChar =
+              mistakes[Math.floor(Math.random() * mistakes.length)];
 
-        if (nextText === "") {
-          setIsDeleting(false);
-          setWordIndex((prev) => (prev + 1) % words.length);
-        }
-      }
-    }, typingSpeed);
+            setDisplayed((prev) => prev + randomChar);
+            setIsFixing(true);
+
+            return;
+          }
+
+          const nextText = currentWord.slice(0, displayed.length + 1);
+
+          setDisplayed(nextText);
+
+          // Word completed
+          if (nextText === currentWord) {
+            timeout = setTimeout(() => {
+              setIsDeleting(true);
+            }, 1200);
+          }
+        },
+        randomDelay(70, 150),
+      );
+    }
+
+    // --------------------------------
+    // Fix typo
+    // --------------------------------
+    if (isFixing) {
+      timeout = setTimeout(
+        () => {
+          setDisplayed((prev) => prev.slice(0, -1));
+          setIsFixing(false);
+        },
+        randomDelay(120, 250),
+      );
+    }
+
+    // --------------------------------
+    // Delete
+    // --------------------------------
+    if (isDeleting) {
+      timeout = setTimeout(
+        () => {
+          const nextText = currentWord.slice(0, displayed.length - 1);
+
+          setDisplayed(nextText);
+
+          if (nextText === "") {
+            setIsDeleting(false);
+            setWordIndex((prev) => (prev + 1) % words.length);
+          }
+        },
+        randomDelay(45, 80),
+      );
+    }
 
     return () => clearTimeout(timeout);
-  }, [displayed, isDeleting, currentWord]);
+  }, [displayed, isDeleting, isFixing, currentWord]);
 
   return (
     <motion.span

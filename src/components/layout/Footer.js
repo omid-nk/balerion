@@ -189,7 +189,7 @@ export default function Footer() {
 
         <div>
           <p>
-            Built with 💚 by{" "}
+            Built with 💙 by{" "}
             <Link
               target="_blank"
               className="hover:text-primary hover:underline"
