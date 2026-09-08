@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 import { LuCircleCheck, LuEye, LuEyeOff, LuLock, LuMail } from "react-icons/lu";
 
@@ -22,6 +23,7 @@ export default function LoginPage() {
   const [resendCooldown, setResendCooldown] = useState(0);
 
   const supabase = createClient();
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,9 +82,7 @@ export default function LoginPage() {
       }
 
       toast.success("با موفقیت وارد شدید");
-
-      // بعداً اینجا می‌تونی redirect کنی
-      // router.push("/dashboard");
+      router.push("/");
     } catch (error) {
       console.error(error);
 
