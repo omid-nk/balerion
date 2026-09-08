@@ -21,6 +21,7 @@ const menuItems = [
     title: "دوره‌ها",
     href: "/profile/courses",
     icon: LuPackage,
+    adminOnly: true,
   },
   {
     title: "لیست علاقه‌مندی‌ها",
@@ -39,8 +40,10 @@ const menuItems = [
   },
 ];
 
-export default function ProfileNav() {
+export default function ProfileNav({ isAdmin }) {
   const pathname = usePathname();
+
+  const visibleItems = menuItems.filter((item) => !item.adminOnly || isAdmin);
 
   return (
     <nav>
@@ -49,7 +52,7 @@ export default function ProfileNav() {
       </p>
 
       <ul className="flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible">
-        {menuItems.map((item) => {
+        {visibleItems.map((item) => {
           const Icon = item.icon;
 
           const isActive =

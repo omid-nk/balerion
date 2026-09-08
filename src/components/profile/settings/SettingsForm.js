@@ -153,7 +153,7 @@ export default function SettingsForm({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 select-none">
       <ProfileSettings
         username={username}
         setUsername={setUsername}

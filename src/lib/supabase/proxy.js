@@ -43,12 +43,27 @@ export async function updateSession(request) {
   const isProfileRoute =
     pathname === "/profile" || pathname.startsWith("/profile/");
 
+  const isCoursesRoute =
+    pathname === "/profile/courses" || pathname.startsWith("/profile/courses/");
+
   if (user && isAuthRoute) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
   if (!user && isProfileRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (user && isCoursesRoute) {
+    const { data: profile, error } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (error || profile?.role !== "admin") {
+      return NextResponse.redirect(new URL("/profile", request.url));
+    }
   }
 
   return supabaseResponse;

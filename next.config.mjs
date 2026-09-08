@@ -1,10 +1,17 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "pwtqllwxedbqeqnbpxmk.supabase.co",
+        pathname: "/storage/v1/object/public/avatars/**",
+      },
+      {
+        protocol: "https",
+        hostname: "pwtqllwxedbqeqnbpxmk.supabase.co",
+        pathname: "/storage/v1/object/public/images/**",
       },
     ],
   },
@@ -14,7 +21,7 @@ const nextConfig = {
       {
         source: "/course",
         destination: "/courses",
-        permanent: true, // 308 Permanent Redirect
+        permanent: true,
       },
     ];
   },

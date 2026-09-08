@@ -1,10 +1,7 @@
 import Image from "next/image";
-
 import ProfileNav from "@/components/profile/ProfileNav";
 import ProfileLogout from "@/components/profile/ProfileLogout";
-
 import { LuShieldCheck } from "react-icons/lu";
-
 import { createClient } from "@/lib/supabase/server";
 
 export default async function ProfileLayout({ children }) {
@@ -31,7 +28,7 @@ export default async function ProfileLayout({ children }) {
   return (
     <main className="flex flex-col gap-4 lg:flex-row">
       {/* Sidebar */}
-      <aside className="w-full shrink-0 p-4 lg:w-64">
+      <aside className="w-full shrink-0 p-4 select-none lg:w-64">
         {/* User */}
         <div className="border-border mb-5 border-b pb-5">
           <div className="flex items-center gap-3 px-2">
@@ -77,7 +74,7 @@ export default async function ProfileLayout({ children }) {
         </div>
 
         {/* Navigation */}
-        <ProfileNav />
+        <ProfileNav isAdmin={isAdmin} />
 
         {/* Logout */}
         <div className="border-border mt-4 border-t pt-4">

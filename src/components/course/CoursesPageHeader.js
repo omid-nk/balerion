@@ -15,7 +15,7 @@ export default function CoursesPageHeader({ title }) {
       <div className="bg-primary/15 absolute -right-10 -bottom-16 size-48 rounded-full blur-3xl sm:right-10 sm:-bottom-24 sm:size-72" />
 
       {/* Breadcrumb */}
-      <div className="relative mb-8 self-start sm:absolute sm:top-6 sm:right-6 sm:mb-0">
+      <div className="relative mb-4 flex w-full items-center justify-center self-start md:absolute md:top-6 md:right-6 md:mb-0 md:w-fit">
         <div className="bg-light dark:bg-dark rounded-full px-3 py-1 sm:px-4">
           <Breadcrumb
             items={[
