@@ -6,12 +6,36 @@ import CategoriesHeader from "@/components/course/CategoriesHeader";
 import CourseGrid from "@/components/course/CourseGrid";
 import ExpandableText from "@/components/shared/ExpandableText";
 
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+
+  const supabase = await createClient();
+
+  const { data: category } = await supabase
+    .from("categories")
+    .select("name, content")
+    .eq("slug", slug)
+    .single();
+
+  if (!category) {
+    return {
+      title: "دسته‌بندی پیدا نشد",
+    };
+  }
+
+  return {
+    title: `${category.name}`,
+    description:
+      category.content ||
+      `دوره‌های آموزشی دسته‌بندی ${category.name} در Balerion`,
+  };
+}
+
 export default async function CategoriesPage({ params }) {
   const { slug } = await params;
 
   const supabase = await createClient();
 
-  // دریافت دسته‌بندی
   const { data: category, error: categoryError } = await supabase
     .from("categories")
     .select("*")
@@ -22,7 +46,6 @@ export default async function CategoriesPage({ params }) {
     notFound();
   }
 
-  // دریافت دوره‌های مربوط به دسته‌بندی
   const { data: courseRelations, error: coursesError } = await supabase
     .from("course_categories")
     .select(

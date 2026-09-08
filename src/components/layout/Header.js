@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import { AnimatePresence, motion } from "motion/react";
+
 import Link from "next/link";
 
 import Logo from "../shared/Logo";
@@ -23,14 +25,40 @@ import {
   LuX,
 } from "react-icons/lu";
 
+import { createClient } from "@/lib/supabase/client";
+
 export default function Header() {
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
   const [hasLoggedin, setHasLoggedin] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
 
+  const supabase = createClient();
+
   function handleBurgerBtn() {
     setBurgerMenuOpen((prev) => !prev);
   }
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setHasLoggedin(!!user);
+    };
+
+    checkUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setHasLoggedin(!!session?.user);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [supabase]);
 
   const items = [
     {
@@ -135,7 +163,6 @@ export default function Header() {
                 className="bg-light dark:bg-dark fixed top-0 right-0 bottom-0 z-50 flex w-[85%] max-w-sm flex-col p-5 md:hidden"
               >
                 {/* Menu Header */}
-
                 <div className="border-border flex items-center justify-between border-b pb-4">
                   <Logo />
 
@@ -173,22 +200,35 @@ export default function Header() {
 
                 {/* Auth Buttons */}
                 <div className="border-border mt-4 flex gap-2 border-t pt-4">
-                  <Link
-                    href="/login"
-                    onClick={() => setBurgerMenuOpen(false)}
-                    className="hover:bg-primary/10 hover:text-primary border-border flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm transition-colors"
-                  >
-                    <LuUserRound className="size-5" />
-                    ورود
-                  </Link>
+                  {hasLoggedin ? (
+                    <Link
+                      href="/profile"
+                      onClick={() => setBurgerMenuOpen(false)}
+                      className="hover:bg-primary/10 hover:text-primary border-border flex w-full items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm transition-colors"
+                    >
+                      <LuUserRound className="size-5" />
+                      پروفایل
+                    </Link>
+                  ) : (
+                    <>
+                      <Link
+                        href="/login"
+                        onClick={() => setBurgerMenuOpen(false)}
+                        className="hover:bg-primary/10 hover:text-primary border-border flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm transition-colors"
+                      >
+                        <LuUserRound className="size-5" />
+                        ورود
+                      </Link>
 
-                  <Link
-                    href="/register"
-                    onClick={() => setBurgerMenuOpen(false)}
-                    className="bg-primary hover:bg-primary/90 text-light flex flex-1 items-center justify-center rounded-xl px-3 py-2.5 text-sm transition-colors"
-                  >
-                    ثبت‌نام
-                  </Link>
+                      <Link
+                        href="/register"
+                        onClick={() => setBurgerMenuOpen(false)}
+                        className="bg-primary hover:bg-primary/90 text-light flex flex-1 items-center justify-center rounded-xl px-3 py-2.5 text-sm transition-colors"
+                      >
+                        ثبت‌نام
+                      </Link>
+                    </>
+                  )}
                 </div>
               </motion.section>
             </>
@@ -261,6 +301,7 @@ export default function Header() {
             <Link className="hover:text-primary" href="/mags">
               مقالات
             </Link>
+
             <Link className="hover:text-primary" href="/about-us">
               درباره‌ما
             </Link>
@@ -269,23 +310,25 @@ export default function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-3 *:cursor-pointer *:p-1">
-          <Link href={"/cart"} type="button">
+          <Link href="/cart" aria-label="سبد خرید">
             <LuShoppingBag className="size-6" />
           </Link>
 
           {hasLoggedin ? (
-            <button type="button" className="hidden md:block">
+            <Link
+              href="/profile"
+              className="hidden md:block"
+              aria-label="پروفایل"
+            >
               <LuUserRound className="size-6" />
-            </button>
+            </Link>
           ) : (
-            <button className="hidden md:block">
-              <Link
-                href="/login"
-                className="bg-primary hover:bg-primary/90 text-light rounded-lg px-4 py-2 text-sm transition-all"
-              >
-                ورود | ثبت‌نام
-              </Link>
-            </button>
+            <Link
+              href="/login"
+              className="bg-primary border-primary text-light hidden h-full rounded-lg border-3 text-sm transition-all md:block"
+            >
+              <span className="p-3">ورود | ثبت‌نام</span>
+            </Link>
           )}
         </div>
       </section>

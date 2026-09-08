@@ -3,6 +3,11 @@ import { createClient } from "@/lib/supabase/server";
 import CourseGrid from "@/components/course/CourseGrid";
 import CoursesPageHeader from "@/components/course/CoursesPageHeader";
 
+export const metadata = {
+  title: "همه دوره‌ها",
+  description: "",
+};
+
 export default async function Page({ searchParams }) {
   const supabase = await createClient();
 

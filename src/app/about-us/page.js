@@ -1,11 +1,15 @@
-"use client";
-
+import Link from "next/link";
 import {
   LuRocket,
   LuCode,
   LuGraduationCap,
   LuShieldCheck,
 } from "react-icons/lu";
+
+export const metadata = {
+  title: "درباره ما",
+  description: "",
+};
 
 export default function AboutPage() {
   return (
@@ -90,12 +94,12 @@ export default function AboutPage() {
             همین الان اولین دوره خودت رو شروع کن
           </p>
 
-          <a
+          <Link
             href="/courses"
             className="bg-primary hover:bg-primary/90 shadow-primary/20 mt-5 inline-flex items-center rounded-xl px-5 py-3 text-sm font-medium text-white shadow-lg transition hover:-translate-y-0.5 active:scale-[0.98]"
           >
             مشاهده دوره‌ها
-          </a>
+          </Link>
         </section>
       </div>
     </main>
