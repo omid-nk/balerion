@@ -10,7 +10,7 @@ export default function Breadcrumb({ items }) {
           return (
             <li
               key={`${item.title}-${index}`}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 select-none"
             >
               {index > 0 && (
                 <span className="text-dark/30 dark:text-light/30">/</span>

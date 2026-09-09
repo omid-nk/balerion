@@ -120,13 +120,13 @@ export default function Header() {
   ];
 
   return (
-    <header className="mb-12">
+    <header className="mb-12 select-none">
       <div className="bg-primary text-light flex justify-center rounded-b-lg px-3 py-2 text-center text-sm">
         بالریون یک پروژه نمونه‌کار است که طراحی آن با الگوبرداری از وب‌سایت
         سبزلرن پیاده‌سازی شده است.
       </div>
 
-      <section className="border-border flex items-center justify-between gap-6 border-b px-2 py-6 select-none">
+      <section className="border-border flex items-center justify-between gap-6 border-b px-2 py-6">
         {/* Burger Button */}
         <button
           type="button"
