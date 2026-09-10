@@ -7,6 +7,9 @@ import CourseInfoCards from "@/components/courseDetail/CourseInfoCards";
 import CourseContent from "@/components/courseDetail/CourseContent";
 import CourseSidebar from "@/components/courseDetail/CourseSidebar";
 
+import { getCourseComments } from "@/services/comments";
+import CommentsSection from "@/components/comments/CommentsSection";
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const course = await getCourseBySlug(slug);
@@ -24,6 +27,8 @@ export default async function Page({ params }) {
   if (!course) {
     notFound();
   }
+
+  const comments = await getCourseComments(course.id);
 
   const completionPercent = Math.min(
     100,
@@ -66,7 +71,7 @@ export default async function Page({ params }) {
           <CourseContent content={course.content} />
 
           {/* Comments */}
-          <section className="mt-4" />
+          <CommentsSection comments={comments} courseId={course.id} />
         </section>
 
         <CourseSidebar
