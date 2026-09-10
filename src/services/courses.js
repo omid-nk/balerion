@@ -65,7 +65,7 @@ export async function getCoursesByCategory(categoryId) {
 export async function getCourseBySlug(slug) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data: course, error } = await supabase
     .from("courses")
     .select("*")
     .eq("slug", slug)
@@ -76,5 +76,5 @@ export async function getCourseBySlug(slug) {
     throw error;
   }
 
-  return data;
+  return course;
 }
