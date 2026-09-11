@@ -77,3 +77,17 @@ export function clearCart() {
 
   notifyCartChange();
 }
+
+export function setCart(courseIds) {
+  if (typeof window === "undefined") return [];
+
+  const normalizedIds = Array.isArray(courseIds)
+    ? courseIds.map(normalizeCartId)
+    : [];
+
+  localStorage.setItem(CART_KEY, JSON.stringify(normalizedIds));
+
+  notifyCartChange();
+
+  return normalizedIds;
+}

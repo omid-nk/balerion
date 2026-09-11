@@ -4,7 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { LuShoppingCart } from "react-icons/lu";
 
-import { clearCart, getCart, subscribeToCartChanges } from "@/lib/cart";
+import {
+  clearCart,
+  getCart,
+  setCart,
+  subscribeToCartChanges,
+} from "@/lib/cart";
 
 import { getCartCourses } from "@/services/cart";
 
@@ -19,9 +24,8 @@ export default function CartPage() {
   const loadCart = useCallback(async () => {
     const ids = getCart();
 
-    setCourseIds(ids);
-
     if (!ids.length) {
+      setCourseIds([]);
       setCourses([]);
       setLoading(false);
       return;
@@ -36,16 +40,32 @@ export default function CartPage() {
        * Supabase نتیجه را الزاماً به همان ترتیب
        * localStorage برنمی‌گرداند.
        *
-       * پس ترتیب سبد را حفظ می‌کنیم.
+       * پس ابتدا Map می‌سازیم تا هم ترتیب سبد را حفظ کنیم
+       * و هم بتوانیم IDهای نامعتبر را تشخیص بدهیم.
        */
       const courseMap = new Map(
         data.map((course) => [String(course.id), course]),
       );
 
-      const orderedCourses = ids
+      /*
+       * فقط دوره‌هایی که واقعاً در Supabase وجود دارند
+       * و status آن‌ها active است نگه داشته می‌شوند.
+       */
+      const validIds = ids.filter((id) => courseMap.has(String(id)));
+
+      const orderedCourses = validIds
         .map((id) => courseMap.get(String(id)))
         .filter(Boolean);
 
+      /*
+       * اگر بعضی IDها نامعتبر یا غیرفعال شده باشند،
+       * localStorage را هم با لیست معتبر هماهنگ می‌کنیم.
+       */
+      if (validIds.length !== ids.length) {
+        setCart(validIds);
+      }
+
+      setCourseIds(validIds);
       setCourses(orderedCourses);
     } catch (error) {
       console.error("loadCart:", error);
