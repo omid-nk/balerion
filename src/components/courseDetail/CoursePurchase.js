@@ -1,4 +1,4 @@
-import { LuShoppingCart } from "react-icons/lu";
+import AddToCartButton from "@/components/cart/AddToCartButton";
 
 export default function CoursePurchase({
   course,
@@ -67,14 +67,11 @@ export default function CoursePurchase({
           )}
         </div>
 
-        <button
-          type="button"
+        <AddToCartButton
+          courseId={course.id}
+          isFree={isFree}
           className="bg-primary hover:bg-primary/90 flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-5 text-sm font-semibold text-white transition-colors xl:w-full"
-        >
-          {!isFree && <LuShoppingCart className="size-4" />}
-
-          {isFree ? "ثبت‌نام رایگان" : "افزودن به سبد خرید"}
-        </button>
+        />
       </div>
     </div>
   );

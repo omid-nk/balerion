@@ -1,7 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-import { LuShoppingCart } from "react-icons/lu";
 
+import AddToCartButton from "@/components/cart/AddToCartButton";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 
 export default function CourseHero({
@@ -32,13 +31,11 @@ export default function CourseHero({
         </p>
 
         <div className="flex flex-wrap items-center gap-4">
-          <button
-            type="button"
+          <AddToCartButton
+            courseId={course.id}
+            isFree={course.price === 0}
             className="bg-primary text-light flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm transition-all hover:brightness-95 sm:px-6"
-          >
-            <LuShoppingCart className="size-4" />
-            افزودن به سبد خرید
-          </button>
+          />
 
           <div className="min-w-fit">
             {course.price === 0 ? (
