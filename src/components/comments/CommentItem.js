@@ -13,6 +13,8 @@ export default function CommentItem({ comment, courseId, isReply = false }) {
 
   const displayName = profile?.full_name || profile?.username || "کاربر";
 
+  const canReply = comment.status === "approved";
+
   return (
     <div className={isReply ? "mr-6 sm:mr-10" : ""}>
       <article className="border-dark/10 bg-background dark:border-light/10 dark:bg-dark/50 rounded-xl border p-4">
@@ -46,7 +48,7 @@ export default function CommentItem({ comment, courseId, isReply = false }) {
               {comment.content}
             </p>
 
-            {!isReply && (
+            {!isReply && canReply && (
               <button
                 type="button"
                 onClick={() => setShowReplyForm((prev) => !prev)}
@@ -61,7 +63,7 @@ export default function CommentItem({ comment, courseId, isReply = false }) {
         </div>
       </article>
 
-      {showReplyForm && (
+      {showReplyForm && canReply && (
         <div className="mt-3">
           <CommentForm
             courseId={courseId}

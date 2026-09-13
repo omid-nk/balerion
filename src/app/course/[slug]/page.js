@@ -1,17 +1,17 @@
 import { notFound } from "next/navigation";
 
 import { getCourseBySlug } from "@/services/courses";
+import { getCourseComments } from "@/services/comments";
 
 import CourseHero from "@/components/courseDetail/CourseHero";
 import CourseInfoCards from "@/components/courseDetail/CourseInfoCards";
 import CourseContent from "@/components/courseDetail/CourseContent";
 import CourseSidebar from "@/components/courseDetail/CourseSidebar";
-
-import { getCourseComments } from "@/services/comments";
 import CommentsSection from "@/components/comments/CommentsSection";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+
   const course = await getCourseBySlug(slug);
 
   return {
@@ -20,15 +20,23 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function Page({ params }) {
+export default async function Page({ params, searchParams }) {
   const { slug } = await params;
+
   const course = await getCourseBySlug(slug);
 
   if (!course) {
     notFound();
   }
 
-  const comments = await getCourseComments(course.id);
+  const query = await searchParams;
+
+  const page = Math.max(1, Number(query?.page) || 1);
+
+  const commentsResult = await getCourseComments(course.id, {
+    page,
+    pageSize: 10,
+  });
 
   const completionPercent = Math.min(
     100,
@@ -70,8 +78,13 @@ export default async function Page({ params }) {
 
           <CourseContent content={course.content} />
 
-          {/* Comments */}
-          <CommentsSection comments={comments} courseId={course.id} />
+          <CommentsSection
+            comments={commentsResult.comments}
+            courseId={course.id}
+            page={commentsResult.page}
+            totalPages={commentsResult.totalPages}
+            total={commentsResult.total}
+          />
         </section>
 
         <CourseSidebar

@@ -7,13 +7,21 @@ import {
   LuMessageSquareText,
   LuPackage,
   LuSettings,
+  LuMessagesSquare,
 } from "react-icons/lu";
+
 const menuItems = [
   { title: "داشبورد", href: "/profile", icon: LuLayoutDashboard },
   {
     title: "دوره‌ها",
     href: "/profile/courses",
     icon: LuPackage,
+    adminOnly: true,
+  },
+  {
+    title: "مدیریت نظرات",
+    href: "/profile/comments/manage",
+    icon: LuMessagesSquare,
     adminOnly: true,
   },
   { title: "لیست علاقه‌مندی‌ها", href: "/profile/favorites", icon: LuHeart },

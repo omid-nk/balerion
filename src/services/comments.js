@@ -4,10 +4,80 @@ import { createClient } from "@/lib/supabase/server";
  * دریافت کامنت‌های تاییدشده یک دوره
  * برای نمایش عمومی
  */
-export async function getCourseComments(courseId) {
+export async function getCourseComments(
+  courseId,
+  { page = 1, pageSize = 10 } = {},
+) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const safePage = Math.max(1, Number(page) || 1);
+  const safePageSize = Math.min(50, Math.max(1, Number(pageSize) || 10));
+
+  const from = (safePage - 1) * safePageSize;
+  const to = from + safePageSize - 1;
+
+  // فقط کامنت‌های اصلی را paginate می‌کنیم.
+  const {
+    data: rootComments,
+    count,
+    error: rootError,
+  } = await supabase
+    .from("comments")
+    .select(
+      `
+      id,
+      author_id,
+      course_id,
+      parent_id,
+      content,
+      status,
+      created_at,
+      updated_at,
+      deleted_at,
+      profiles:author_id (
+        username,
+        full_name,
+        avatar_url
+      )
+    `,
+      { count: "exact" },
+    )
+    .eq("course_id", courseId)
+    .eq("status", "approved")
+    .is("deleted_at", null)
+    .is("parent_id", null)
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (rootError) {
+    console.error("getCourseComments:", rootError);
+
+    return {
+      comments: [],
+      total: 0,
+      totalPages: 0,
+      page: safePage,
+      pageSize: safePageSize,
+    };
+  }
+
+  const comments = rootComments ?? [];
+
+  // اگر این صفحه کامنت اصلی ندارد، دیگر نیازی به گرفتن reply نیست.
+  if (comments.length === 0) {
+    return {
+      comments: [],
+      total: count ?? 0,
+      totalPages: Math.ceil((count ?? 0) / safePageSize),
+      page: safePage,
+      pageSize: safePageSize,
+    };
+  }
+
+  const rootIds = comments.map((comment) => comment.id);
+
+  // تمام replyهای کامنت‌های همین صفحه را می‌گیریم.
+  const { data: replies, error: repliesError } = await supabase
     .from("comments")
     .select(
       `
@@ -27,60 +97,118 @@ export async function getCourseComments(courseId) {
       )
     `,
     )
+    .in("parent_id", rootIds)
     .eq("course_id", courseId)
     .eq("status", "approved")
     .is("deleted_at", null)
     .order("created_at", { ascending: true });
 
-  if (error) {
-    console.error("getCourseComments:", error);
-    return [];
+  if (repliesError) {
+    console.error("getCourseComments replies:", repliesError);
+
+    // خود کامنت‌های اصلی را نگه می‌داریم حتی اگر گرفتن replyها خطا بخورد.
+    return {
+      comments,
+      total: count ?? 0,
+      totalPages: Math.ceil((count ?? 0) / safePageSize),
+      page: safePage,
+      pageSize: safePageSize,
+    };
   }
 
-  return data ?? [];
+  return {
+    comments: [...comments, ...(replies ?? [])],
+    total: count ?? 0,
+    totalPages: Math.ceil((count ?? 0) / safePageSize),
+    page: safePage,
+    pageSize: safePageSize,
+  };
 }
 
 /**
  * دریافت تمام کامنت‌ها برای پنل مدیریت
  * RLS مشخص می‌کند فقط ادمین بتواند این داده‌ها را ببیند.
  */
-export async function getAllComments() {
+export async function getAllComments({
+  page = 1,
+  pageSize = 20,
+  status = "all",
+} = {}) {
   const supabase = await createClient();
-
-  const { data, error } = await supabase
+  const safePage = Math.max(1, Number(page) || 1);
+  const safePageSize = Math.min(100, Math.max(1, Number(pageSize) || 20));
+  const from = (safePage - 1) * safePageSize;
+  const to = from + safePageSize - 1;
+  let commentsQuery = supabase
     .from("comments")
     .select(
-      `
-      id,
-      author_id,
-      course_id,
-      article_id,
-      parent_id,
-      content,
-      status,
-      created_at,
-      updated_at,
-      deleted_at,
-      profiles:author_id (
-        username,
-        full_name,
-        avatar_url
-      ),
-      courses:course_id (
-        id,
-        name,
-        slug
-      )
-    `,
+      ` id, author_id, course_id, article_id, parent_id, content, status, created_at, updated_at, deleted_at, profiles:author_id ( username, full_name, avatar_url ), courses:course_id ( id, name, slug ), articles:article_id ( id, title, slug ) `,
+      { count: "exact" },
     )
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("getAllComments:", error);
-    return [];
+    .order("created_at", { ascending: false })
+    .range(from, to);
+  if (
+    status === "pending" ||
+    status === "approved" ||
+    status === "rejected" ||
+    status === "spam"
+  ) {
+    commentsQuery = commentsQuery.eq("status", status);
   }
-
-  return data ?? [];
+  const [
+    { data: comments, count: filteredCount, error: commentsError },
+    allCountResult,
+    pendingCountResult,
+    approvedCountResult,
+    rejectedCountResult,
+    spamCountResult,
+  ] = await Promise.all([
+    commentsQuery,
+    supabase.from("comments").select("id", { count: "exact", head: true }),
+    supabase
+      .from("comments")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending"),
+    supabase
+      .from("comments")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "approved"),
+    supabase
+      .from("comments")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "rejected"),
+    supabase
+      .from("comments")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "spam"),
+  ]);
+  if (commentsError) {
+    console.error("getAllComments:", commentsError);
+    return {
+      comments: [],
+      total: 0,
+      totalPages: 0,
+      page: safePage,
+      pageSize: safePageSize,
+      counts: { all: 0, pending: 0, approved: 0, rejected: 0, spam: 0 },
+    };
+  }
+  const counts = {
+    all: allCountResult.count ?? 0,
+    pending: pendingCountResult.count ?? 0,
+    approved: approvedCountResult.count ?? 0,
+    rejected: rejectedCountResult.count ?? 0,
+    spam: spamCountResult.count ?? 0,
+  };
+  const total = filteredCount ?? 0;
+  return {
+    comments: comments ?? [],
+    total,
+    totalPages: Math.ceil(total / safePageSize),
+    page: safePage,
+    pageSize: safePageSize,
+    counts,
+  };
 }
 
 /**
