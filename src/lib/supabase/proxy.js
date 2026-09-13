@@ -38,30 +38,77 @@ export async function updateSession(request) {
 
   const pathname = request.nextUrl.pathname;
 
+  /*
+   * --------------------------------------------------
+   * Auth routes
+   * --------------------------------------------------
+   */
+
   const isAuthRoute = pathname === "/login" || pathname === "/register";
+
+  /*
+   * --------------------------------------------------
+   * Profile routes
+   * --------------------------------------------------
+   */
 
   const isProfileRoute =
     pathname === "/profile" || pathname.startsWith("/profile/");
 
-  const isCoursesRoute =
-    pathname === "/profile/courses" || pathname.startsWith("/profile/courses/");
+  /*
+   * --------------------------------------------------
+   * Admin routes
+   * --------------------------------------------------
+   *
+   * Dashboard itself is NOT admin-only.
+   *
+   * Only management sections are.
+   */
+
+  const isAdminRoute =
+    pathname === "/profile/courses" ||
+    pathname.startsWith("/profile/courses/") ||
+    pathname === "/profile/categories" ||
+    pathname.startsWith("/profile/categories/") ||
+    pathname === "/profile/users" ||
+    pathname.startsWith("/profile/users/") ||
+    pathname === "/profile/comments/manage" ||
+    pathname.startsWith("/profile/comments/manage/") ||
+    pathname === "/profile/orders" ||
+    pathname.startsWith("/profile/orders/");
+
+  /*
+   * --------------------------------------------------
+   * Logged-in users
+   * cannot access login/register
+   * --------------------------------------------------
+   */
 
   if (user && isAuthRoute) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
+  /*
+   * --------------------------------------------------
+   * Logged-out users
+   * cannot access profile
+   * --------------------------------------------------
+   */
+
   if (!user && isProfileRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (user && isCoursesRoute) {
-    const { data: profile, error } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+  /*
+   * --------------------------------------------------
+   * Admin-only routes
+   * --------------------------------------------------
+   */
 
-    if (error || profile?.role !== "admin") {
+  if (user && isAdminRoute) {
+    const { data: isAdmin, error } = await supabase.rpc("is_admin");
+
+    if (error || !isAdmin) {
       return NextResponse.redirect(new URL("/profile", request.url));
     }
   }

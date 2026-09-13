@@ -35,9 +35,9 @@ export default function CommentForm({
 
     setLoading(true);
 
-    const supabase = createClient();
-
     try {
+      const supabase = createClient();
+
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -52,10 +52,11 @@ export default function CommentForm({
         course_id: courseId,
         parent_id: parentId,
         content: value,
+        status: "pending",
       });
 
       if (error) {
-        console.error(error);
+        console.error("CommentForm:", error);
         toast.error("ثبت نظر انجام نشد.");
         return;
       }
@@ -71,7 +72,7 @@ export default function CommentForm({
       onCancel?.();
       router.refresh();
     } catch (error) {
-      console.error(error);
+      console.error("CommentForm:", error);
       toast.error("خطایی رخ داد. دوباره تلاش کنید.");
     } finally {
       setLoading(false);

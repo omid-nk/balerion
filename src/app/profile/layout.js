@@ -1,7 +1,10 @@
 import Image from "next/image";
+
 import ProfileNav from "@/components/profile/ProfileNav";
 import ProfileLogout from "@/components/profile/ProfileLogout";
+
 import { LuShieldCheck } from "react-icons/lu";
+
 import { createClient } from "@/lib/supabase/server";
 
 export default async function ProfileLayout({ children }) {
@@ -17,13 +20,15 @@ export default async function ProfileLayout({ children }) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, username, avatar_url, role")
+    .select("full_name, username, avatar_url")
     .eq("id", user.id)
     .single();
 
+  const { data: isAdmin } = await supabase.rpc("is_admin");
+
   const fullName = profile?.full_name || profile?.username || "کاربر";
+
   const email = user.email || "";
-  const isAdmin = profile?.role === "admin";
 
   return (
     <main className="flex flex-col gap-4 lg:flex-row">

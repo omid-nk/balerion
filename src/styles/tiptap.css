@@ -63,6 +63,12 @@
   opacity: 0.8;
 }
 
+.tiptap-content ul li::marker,
+.tiptap-content ol li::marker {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
 .tiptap-content pre {
   direction: ltr;
   text-align: left;
@@ -86,6 +92,20 @@
 .tiptap-content hr {
   margin: 1.5rem 0;
   border-color: color-mix(in oklch, var(--color-primary) 30%, transparent);
+}
+
+.tiptap-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.25rem auto;
+  border-radius: 0.75rem;
+  object-fit: contain;
+}
+
+.tiptap-content img[width] {
+  width: auto;
+  max-width: 100%;
 }
 
 /* Tablet */
@@ -150,5 +170,10 @@
 
   .tiptap-content hr {
     margin: 2rem 0;
+  }
+
+  .tiptap-content img {
+    margin: 1.5rem auto;
+    border-radius: 1rem;
   }
 }

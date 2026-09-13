@@ -37,12 +37,6 @@ export default function CommentItem({ comment, courseId, isReply = false }) {
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <span className="text-sm font-bold">{displayName}</span>
 
-              {profile?.role === "admin" && (
-                <span className="bg-primary/10 text-primary rounded-md px-1.5 py-0.5 text-[10px]">
-                  مدیر
-                </span>
-              )}
-
               <span className="text-dark/40 dark:text-light/40 text-[11px]">
                 {new Date(comment.created_at).toLocaleDateString("fa-IR")}
               </span>
