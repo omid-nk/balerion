@@ -1,15 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LuPencil } from "react-icons/lu";
+import { getCourseCoverUrl } from "@/services/storage/course-covers";
 
 export default function CourseItem({ course }) {
+  const coverUrl = course.cover_url ? getCourseCoverUrl(course.cover_url) : "";
+
   return (
     <div className="border-border flex flex-col gap-4 rounded-2xl border p-4 transition-colors hover:bg-black/[0.02] sm:flex-row sm:items-center dark:hover:bg-white/[0.02]">
       {/* Course Image */}
       <div className="bg-dark/5 dark:bg-light/5 relative aspect-video w-full shrink-0 overflow-hidden rounded-xl sm:h-24 sm:w-40">
         {course.cover_url ? (
           <Image
-            src={course.cover_url}
+            src={coverUrl}
             alt={course.name}
             fill
             sizes="160px"

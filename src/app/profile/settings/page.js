@@ -19,7 +19,7 @@ export default async function SettingsPage() {
 
   return (
     <div>
-      <div className="mb-8 select-none">
+      <div className="mb-6 select-none">
         <h1 className="text-xl font-bold">تنظیمات حساب</h1>
 
         <p className="text-dark/50 dark:text-light/50 mt-2 text-sm">

@@ -1,7 +1,10 @@
 import Image from "next/image";
+
 import Link from "next/link";
 
 import { LuUsers } from "react-icons/lu";
+
+import { getCourseCoverUrl } from "@/services/storage/course-covers";
 
 export default function CourseCard({ course }) {
   const hasDiscount =
@@ -15,6 +18,8 @@ export default function CourseCard({ course }) {
     ? Math.round(((course.price - course.discount_price) / course.price) * 100)
     : 0;
 
+  const coverUrl = course.cover_url ? getCourseCoverUrl(course.cover_url) : "";
+
   return (
     <Link
       href={course.slug ? `/course/${course.slug}` : "#"}
@@ -22,9 +27,9 @@ export default function CourseCard({ course }) {
     >
       {/* Cover */}
       <div>
-        {course.cover_url ? (
+        {coverUrl ? (
           <Image
-            src={course.cover_url}
+            src={coverUrl}
             alt={course.name ?? "دوره آموزشی"}
             width={1400}
             height={1000}
@@ -55,7 +60,6 @@ export default function CourseCard({ course }) {
           {/* Students */}
           <div className="flex items-center gap-1.5 text-xs">
             <LuUsers className="text-primary/80 mb-1 text-base" />
-
             {(course.student_count ?? 0).toLocaleString("fa-IR")}
           </div>
 

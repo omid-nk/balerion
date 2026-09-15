@@ -77,12 +77,9 @@ export default function CommentsManagement({
 
   return (
     <section>
-      {" "}
-      <div className="mb-6">
-        {" "}
-        <h1 className="font-morabba text-xl font-bold sm:text-2xl">
-          مدیریت نظرات{" "}
-        </h1>
+      <div className="mb-6 select-none">
+        <h1 className="text-xl font-bold"> مدیریت نظرات</h1>
+
         <p className="text-dark/50 dark:text-light/50 mt-2 text-sm">
           نظرات کاربران را بررسی، ویرایش و مدیریت کنید.
         </p>

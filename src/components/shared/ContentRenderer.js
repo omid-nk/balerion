@@ -1,11 +1,31 @@
 import { renderToReactElement } from "@tiptap/static-renderer/pm/react";
+
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 
 const STORAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL;
 
+function parseContent(content) {
+  if (!content) {
+    return null;
+  }
+
+  if (typeof content === "string") {
+    try {
+      return JSON.parse(content);
+    } catch (error) {
+      console.error("Invalid Tiptap JSON:", error);
+      return null;
+    }
+  }
+
+  return content;
+}
+
 function transformContent(node) {
-  if (!node) return node;
+  if (!node || typeof node !== "object") {
+    return node;
+  }
 
   const transformedNode = {
     ...node,
@@ -14,7 +34,6 @@ function transformContent(node) {
   if (node.type === "image" && node.attrs?.src) {
     const src = node.attrs.src;
 
-    // فقط آدرس‌های نسبی /images/... را به Supabase تبدیل کن
     if (src.startsWith("/images/")) {
       transformedNode.attrs = {
         ...node.attrs,
@@ -23,7 +42,7 @@ function transformContent(node) {
     }
   }
 
-  if (node.content) {
+  if (Array.isArray(node.content)) {
     transformedNode.content = node.content.map(transformContent);
   }
 
@@ -31,7 +50,13 @@ function transformContent(node) {
 }
 
 export default function ContentRenderer({ content }) {
-  if (!content) {
+  const parsedContent = parseContent(content);
+
+  if (
+    !parsedContent ||
+    typeof parsedContent !== "object" ||
+    !parsedContent.type
+  ) {
     return (
       <p className="text-dark/50 dark:text-light/50 text-sm">
         محتوایی برای نمایش وجود ندارد.
@@ -39,14 +64,12 @@ export default function ContentRenderer({ content }) {
     );
   }
 
-  const transformedContent = transformContent(content);
+  const transformedContent = transformContent(parsedContent);
 
-  return (
-    <div className="tiptap-content">
-      {renderToReactElement({
-        extensions: [StarterKit, Image],
-        content: transformedContent,
-      })}
-    </div>
-  );
+  const renderedContent = renderToReactElement({
+    extensions: [StarterKit, Image],
+    content: transformedContent,
+  });
+
+  return <div className="tiptap-content">{renderedContent}</div>;
 }
