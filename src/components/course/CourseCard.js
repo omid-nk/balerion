@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 import Link from "next/link";
 
 import { LuUsers } from "react-icons/lu";
@@ -18,76 +17,99 @@ export default function CourseCard({ course }) {
     ? Math.round(((course.price - course.discount_price) / course.price) * 100)
     : 0;
 
+  const isFree = finalPrice === 0;
+
   const coverUrl = course.cover_url ? getCourseCoverUrl(course.cover_url) : "";
 
   return (
     <Link
       href={course.slug ? `/course/${course.slug}` : "#"}
-      className="border-border group dark:bg-dark bg-light flex flex-1 flex-col justify-between rounded-xl border transition-all select-none"
+      className="group border-border bg-light dark:bg-dark flex h-full flex-col overflow-hidden rounded-xl border transition-all duration-300"
     >
       {/* Cover */}
-      <div>
+      <div className="relative overflow-hidden">
         {coverUrl ? (
           <Image
             src={coverUrl}
             alt={course.name ?? "دوره آموزشی"}
             width={1400}
-            height={1000}
-            className="w-full rounded-t-xl rounded-b-4xl transition-all group-hover:brightness-120"
+            height={788}
+            className="aspect-video w-full object-cover"
           />
         ) : (
-          <div className="flex aspect-14/10 items-center justify-center rounded-t-xl rounded-b-4xl bg-gray-100 dark:bg-gray-800">
+          <div className="bg-border flex aspect-video w-full items-center justify-center">
             <span className="text-sm text-gray-400">بدون تصویر</span>
           </div>
         )}
+
+        {/* Discount / Free Badge */}
+        {isFree ? (
+          <span className="bg-primary text-light absolute top-3 right-3 rounded-sm px-2.5 pt-1 pb-0.5 text-[10px]">
+            رایگان
+          </span>
+        ) : hasDiscount ? (
+          <span className="bg-primary text-light absolute top-3 right-3 rounded-sm px-2.5 pt-1 pb-0.5 text-[10px]">
+            {discountPercent}٪ تخفیف
+          </span>
+        ) : null}
       </div>
 
-      {/* Info */}
-      <div className="flex h-full flex-col justify-between">
-        {/* Top */}
-        <div className="flex flex-col gap-2 p-3 sm:p-4">
-          <div className="line-clamp-2 text-xs/relaxed font-bold sm:text-sm/loose">
+      {/* Content */}
+      <div className="flex flex-1 flex-col">
+        <div className="flex flex-1 flex-col gap-3 p-4">
+          {/* Title */}
+          <h3 className="line-clamp-2 text-sm leading-6 font-bold sm:leading-7">
             {course.name ?? "بدون عنوان"}
-          </div>
+          </h3>
 
-          <div className="text-dark/60 dark:text-light/60 line-clamp-5 text-[10px] sm:line-clamp-4 sm:text-xs/relaxed">
+          {/* Description */}
+          <p className="text-dark/60 dark:text-light/60 line-clamp-3 text-[11px] leading-6 sm:text-xs sm:leading-6">
             {course.short_description ?? "توضیحی برای این دوره ثبت نشده است."}
-          </div>
+          </p>
         </div>
 
-        {/* Bottom */}
-        <div className="border-border flex flex-wrap items-center justify-between gap-2 border-t p-4">
-          {/* Students */}
-          <div className="flex items-center gap-1.5 text-xs">
-            <LuUsers className="text-primary/80 mb-1 text-base" />
-            {(course.student_count ?? 0).toLocaleString("fa-IR")}
-          </div>
+        {/* Footer */}
+        <div className="border-border border-t px-4 py-3.5">
+          <div className="flex items-center justify-between gap-3">
+            {/* Students */}
+            <div className="text-dark/60 dark:text-light/60 flex items-center gap-1.5 text-[10px] sm:text-xs">
+              <LuUsers className="text-primary text-base" />
 
-          {/* Price */}
-          <div className="flex flex-col items-end">
-            {course.price === 0 ? (
-              <span className="text-xs font-semibold sm:text-sm">رایگان</span>
-            ) : course.price !== null ? (
-              <>
-                {hasDiscount && (
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-dark/50 dark:text-light/50 text-[10px] line-through sm:text-xs">
+              <span>
+                {(course.student_count ?? 0).toLocaleString("fa-IR")} دانشجو
+              </span>
+            </div>
+
+            {/* Price */}
+            <div className="flex min-w-0 flex-col items-end">
+              {course.price === null ? (
+                <span className="text-xs">نامشخص</span>
+              ) : isFree ? (
+                <>
+                  {course.price > 0 && (
+                    <span className="text-dark/40 dark:text-light/40 text-[10px] line-through">
                       {course.price.toLocaleString("fa-IR")} تومان
                     </span>
+                  )}
 
-                    <span className="bg-primary/10 text-primary rounded-md px-1 py-0.5 text-[9px] font-semibold sm:text-[10px]">
-                      {discountPercent}٪
-                    </span>
-                  </div>
-                )}
+                  <span className="text-primary text-sm font-bold">رایگان</span>
+                </>
+              ) : hasDiscount ? (
+                <>
+                  <span className="text-dark/40 dark:text-light/40 text-[10px] line-through">
+                    {course.price.toLocaleString("fa-IR")} تومان
+                  </span>
 
-                <span className="text-xs font-bold sm:text-sm">
-                  {finalPrice.toLocaleString("fa-IR")} تومان
+                  <span className="text-sm font-bold">
+                    {finalPrice.toLocaleString("fa-IR")} تومان
+                  </span>
+                </>
+              ) : (
+                <span className="text-sm font-bold">
+                  {course.price.toLocaleString("fa-IR")} تومان
                 </span>
-              </>
-            ) : (
-              <span className="text-xs sm:text-sm">نامشخص</span>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

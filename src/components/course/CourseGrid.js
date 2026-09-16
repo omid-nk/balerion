@@ -10,10 +10,10 @@ export default function CoursesGrid({
   return (
     <>
       {courses.length > 0 ? (
-        <section className="">
+        <section>
           {hasHeader && <TitleHeading title={title ?? ""} linkHref={link} />}
 
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3 xl:grid-cols-4 xl:gap-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5 xl:grid-cols-4">
             {courses.map((course) => (
               <CourseCard key={course.id} course={course} />
             ))}

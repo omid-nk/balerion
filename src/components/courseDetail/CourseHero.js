@@ -37,13 +37,29 @@ export default function CourseHero({
         <div className="flex flex-wrap items-center gap-4">
           <AddToCartButton
             courseId={course.id}
-            isFree={course.price === 0}
+            isFree={finalPrice === 0}
             className="bg-primary text-light flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm transition-all hover:brightness-95 sm:px-6"
           />
 
           <div className="min-w-fit">
-            {course.price === 0 ? (
-              <p className="text-base font-bold sm:text-lg">رایگان</p>
+            {course.price === null ? (
+              <p className="text-base font-bold sm:text-lg">نامشخص</p>
+            ) : finalPrice === 0 ? (
+              <>
+                {course.price > 0 && (
+                  <div className="flex items-center gap-2">
+                    <p className="text-dark/60 dark:text-light/60 text-xs line-through sm:text-sm">
+                      {course.price.toLocaleString("fa-IR")} تومان
+                    </p>
+
+                    <span className="bg-primary/10 text-primary rounded-md px-1.5 py-0.5 text-xs font-semibold">
+                      {discountPercent}٪ تخفیف
+                    </span>
+                  </div>
+                )}
+
+                <p className="mt-0.5 text-base font-bold sm:text-lg">رایگان</p>
+              </>
             ) : hasDiscount ? (
               <>
                 <div className="flex items-center gap-2">
@@ -62,7 +78,7 @@ export default function CourseHero({
               </>
             ) : (
               <p className="text-base font-bold sm:text-lg">
-                {course.price?.toLocaleString("fa-IR")} تومان
+                {course.price.toLocaleString("fa-IR")} تومان
               </p>
             )}
           </div>
