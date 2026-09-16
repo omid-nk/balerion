@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import FormInput from "@/components/shared/FormInput";
-import FormSelect from "@/components/shared/FormSelect";
 import FormImageUpload from "@/components/shared/FormImageUpload";
 import FormPrerequisites from "@/components/shared/FormPrerequisites";
+import FormMultiSelect from "@/components/shared/FormMultiSelect";
 
 import { createCourse } from "@/services/courses/create-course";
 import { getCategories } from "@/services/categories/get-categories";
@@ -65,6 +65,8 @@ export default function CreateCourseForm() {
 
     const action = event.nativeEvent.submitter?.value;
 
+    const categoryIds = formData.get("category_ids");
+
     const payload = {
       name: formData.get("name"),
       slug: formData.get("slug"),
@@ -73,7 +75,7 @@ export default function CreateCourseForm() {
       short_description: formData.get("short_description"),
       price: formData.get("price"),
       discount_price: formData.get("discount_price"),
-      category_id: formData.get("category_id"),
+      category_ids: categoryIds,
       prerequisites,
       completion_percent: formData.get("completion_percent") || 0,
       content: formData.get("content"),
@@ -248,19 +250,15 @@ export default function CreateCourseForm() {
           </div>
 
           <div className="grid grid-cols-1 gap-5">
-            <FormSelect
-              label="دسته‌بندی"
-              name="category_id"
-              placeholder={
-                categoriesLoading
-                  ? "در حال دریافت دسته‌بندی‌ها..."
-                  : "انتخاب دسته‌بندی"
-              }
+            <FormMultiSelect
+              label="دسته‌بندی‌ها"
+              name="category_ids"
+              placeholder="انتخاب دسته‌بندی‌ها"
               required
               loading={categoriesLoading}
               disabled={categoriesLoading}
               options={categoryOptions}
-              description="دسته‌بندی اصلی دوره را انتخاب کنید."
+              description="می‌توانید هر تعداد دسته‌بندی که مرتبط با دوره است انتخاب کنید."
             />
 
             <FormPrerequisites

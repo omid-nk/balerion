@@ -89,7 +89,7 @@ export async function createCourse(data) {
     short_description,
     price,
     discount_price,
-    category_id,
+    category_ids,
     prerequisites,
     completion_percent,
     content,
@@ -118,8 +118,29 @@ export async function createCourse(data) {
     throw new Error("توضیحات کوتاه دوره الزامی است.");
   }
 
-  if (!category_id) {
-    throw new Error("انتخاب دسته‌بندی دوره الزامی است.");
+  let parsedCategoryIds = [];
+
+  try {
+    parsedCategoryIds =
+      typeof category_ids === "string"
+        ? JSON.parse(category_ids)
+        : category_ids;
+
+    if (!Array.isArray(parsedCategoryIds)) {
+      throw new Error();
+    }
+
+    parsedCategoryIds = [
+      ...new Set(
+        parsedCategoryIds.map((id) => String(id).trim()).filter(Boolean),
+      ),
+    ];
+  } catch {
+    throw new Error("دسته‌بندی‌های دوره معتبر نیستند.");
+  }
+
+  if (parsedCategoryIds.length === 0) {
+    throw new Error("حداقل یک دسته‌بندی برای دوره انتخاب کنید.");
   }
 
   if (!["draft", "active"].includes(status)) {
@@ -240,16 +261,18 @@ export async function createCourse(data) {
      * -----------------------------------------------------
      */
 
+    const categoryRows = parsedCategoryIds.map((categoryId) => ({
+      course_id: courseId,
+      category_id: categoryId,
+    }));
+
     const { error: categoryError } = await supabase
       .from("course_categories")
-      .insert({
-        course_id: courseId,
-        category_id: category_id,
-      });
+      .insert(categoryRows);
 
     if (categoryError) {
       throw new Error(
-        categoryError.message || "اتصال دسته‌بندی به دوره با خطا مواجه شد.",
+        categoryError.message || "اتصال دسته‌بندی‌های دوره با خطا مواجه شد.",
       );
     }
 
@@ -266,6 +289,7 @@ export async function createCourse(data) {
         name: name.trim(),
         slug: slug.trim(),
         cover_url: finalCoverPath,
+        category_ids: parsedCategoryIds,
         prerequisites: parsedPrerequisites,
       },
     };
