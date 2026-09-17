@@ -48,7 +48,7 @@ function parsePrerequisites(value) {
     const parsed = JSON.parse(value);
 
     if (!Array.isArray(parsed)) {
-      throw new Error("پیش‌نیازهای دوره باید به صورت آرایه باشد.");
+      throw new Error();
     }
 
     return parsed
@@ -62,8 +62,24 @@ function parsePrerequisites(value) {
   }
 }
 
+function parseCategoryIds(value) {
+  try {
+    const parsed = typeof value === "string" ? JSON.parse(value) : value;
+
+    if (!Array.isArray(parsed)) {
+      throw new Error();
+    }
+
+    return [...new Set(parsed.map((id) => String(id).trim()).filter(Boolean))];
+  } catch {
+    throw new Error("دسته‌بندی‌های دوره معتبر نیستند.");
+  }
+}
+
 function getFinalCoverPath(tempPath, courseId) {
-  if (!tempPath) return null;
+  if (!tempPath) {
+    return null;
+  }
 
   const fileName = tempPath.split("/").pop();
 
@@ -84,11 +100,12 @@ async function deleteStorageFile(supabase, path) {
   }
 }
 
-export async function createCourse(data) {
+export async function updateCourse(courseId, data) {
   const supabase = createClient();
 
-  let courseId = null;
-  let finalCoverPath = null;
+  if (!courseId) {
+    throw new Error("شناسه دوره معتبر نیست.");
+  }
 
   const {
     name,
@@ -103,13 +120,8 @@ export async function createCourse(data) {
     completion_percent,
     content,
     status = "draft",
+    previous_cover_url,
   } = data;
-
-  /*
-   * -------------------------------------------------------
-   * Validation
-   * -------------------------------------------------------
-   */
 
   if (!name?.trim()) {
     throw new Error("تیتر دوره الزامی است.");
@@ -127,26 +139,7 @@ export async function createCourse(data) {
     throw new Error("توضیحات کوتاه دوره الزامی است.");
   }
 
-  let parsedCategoryIds = [];
-
-  try {
-    parsedCategoryIds =
-      typeof category_ids === "string"
-        ? JSON.parse(category_ids)
-        : category_ids;
-
-    if (!Array.isArray(parsedCategoryIds)) {
-      throw new Error();
-    }
-
-    parsedCategoryIds = [
-      ...new Set(
-        parsedCategoryIds.map((id) => String(id).trim()).filter(Boolean),
-      ),
-    ];
-  } catch {
-    throw new Error("دسته‌بندی‌های دوره معتبر نیستند.");
-  }
+  const parsedCategoryIds = parseCategoryIds(category_ids);
 
   if (parsedCategoryIds.length === 0) {
     throw new Error("حداقل یک دسته‌بندی برای دوره انتخاب کنید.");
@@ -157,13 +150,10 @@ export async function createCourse(data) {
   }
 
   const parsedPrice = parseNumber(price, 0);
-
   const parsedDiscountPrice = parseNumber(discount_price, null);
-
   const parsedCompletionPercent = parseNumber(completion_percent, 0);
 
   const parsedContent = parseContent(content);
-
   const parsedPrerequisites = parsePrerequisites(prerequisites);
 
   if (parsedPrice < 0) {
@@ -182,61 +172,56 @@ export async function createCourse(data) {
     throw new Error("درصد تکمیل محتوا باید بین ۰ تا ۱۰۰ باشد.");
   }
 
-  /*
-   * فقط اجازه می‌دهیم cover_url یک فایل موقت
-   * از bucket خودمان باشد.
-   */
+  const isNewCover = cover_url && cover_url !== previous_cover_url;
 
-  if (cover_url && !String(cover_url).startsWith("temp/")) {
+  if (isNewCover && !String(cover_url).startsWith("temp/")) {
     throw new Error("مسیر تصویر دوره معتبر نیست.");
   }
 
-  try {
-    /*
-     * -----------------------------------------------------
-     * 1. Create course
-     * -----------------------------------------------------
-     */
+  let finalCoverPath = previous_cover_url || null;
+  let newCoverPath = null;
 
-    const { data: course, error: courseError } = await supabase
+  try {
+    // -----------------------------------------------------
+    // 1. Update course
+    // -----------------------------------------------------
+
+    const updateData = {
+      name: name.trim(),
+      slug: slug.trim(),
+      duration: duration.trim(),
+      short_description: short_description.trim(),
+      price: parsedPrice,
+      discount_price: parsedDiscountPrice,
+      prerequisites: parsedPrerequisites,
+      completion_percent: parsedCompletionPercent,
+      content: parsedContent,
+      status,
+    };
+
+    const { error: courseError } = await supabase
       .from("courses")
-      .insert({
-        name: name.trim(),
-        slug: slug.trim(),
-        duration: duration.trim(),
-        short_description: short_description.trim(),
-        price: parsedPrice,
-        discount_price: parsedDiscountPrice,
-        prerequisites: parsedPrerequisites,
-        completion_percent: parsedCompletionPercent,
-        content: parsedContent,
-        status,
-      })
-      .select("id")
-      .single();
+      .update(updateData)
+      .eq("id", courseId);
 
     if (courseError) {
       if (courseError.code === "23505") {
         throw new Error("این اسلاگ قبلاً برای یک دوره استفاده شده است.");
       }
 
-      throw new Error(courseError.message || "ساخت دوره با خطا مواجه شد.");
+      throw new Error(courseError.message || "ویرایش دوره با خطا مواجه شد.");
     }
 
-    courseId = course.id;
+    // -----------------------------------------------------
+    // 2. Move new cover
+    // -----------------------------------------------------
 
-    /*
-     * -----------------------------------------------------
-     * 2. Move temporary cover to final location
-     * -----------------------------------------------------
-     */
-
-    if (cover_url) {
-      finalCoverPath = getFinalCoverPath(cover_url, courseId);
+    if (isNewCover) {
+      newCoverPath = getFinalCoverPath(cover_url, courseId);
 
       const { error: moveError } = await supabase.storage
         .from(BUCKET_NAME)
-        .move(cover_url, finalCoverPath);
+        .move(cover_url, newCoverPath);
 
       if (moveError) {
         throw new Error(
@@ -244,11 +229,7 @@ export async function createCourse(data) {
         );
       }
 
-      /*
-       * ---------------------------------------------------
-       * 3. Save final cover path in course
-       * ---------------------------------------------------
-       */
+      finalCoverPath = newCoverPath;
 
       const { error: coverUpdateError } = await supabase
         .from("courses")
@@ -262,13 +243,27 @@ export async function createCourse(data) {
           coverUpdateError.message || "ذخیره تصویر دوره با خطا مواجه شد.",
         );
       }
+
+      if (previous_cover_url && previous_cover_url !== finalCoverPath) {
+        await deleteStorageFile(supabase, previous_cover_url);
+      }
     }
 
-    /*
-     * -----------------------------------------------------
-     * 4. Create course-category relation
-     * -----------------------------------------------------
-     */
+    // -----------------------------------------------------
+    // 3. Replace course categories
+    // -----------------------------------------------------
+
+    const { error: deleteCategoriesError } = await supabase
+      .from("course_categories")
+      .delete()
+      .eq("course_id", courseId);
+
+    if (deleteCategoriesError) {
+      throw new Error(
+        deleteCategoriesError.message ||
+          "حذف دسته‌بندی‌های قبلی با خطا مواجه شد.",
+      );
+    }
 
     const categoryRows = parsedCategoryIds.map((categoryId) => ({
       course_id: courseId,
@@ -281,15 +276,9 @@ export async function createCourse(data) {
 
     if (categoryError) {
       throw new Error(
-        categoryError.message || "اتصال دسته‌بندی‌های دوره با خطا مواجه شد.",
+        categoryError.message || "ذخیره دسته‌بندی‌های دوره با خطا مواجه شد.",
       );
     }
-
-    /*
-     * -----------------------------------------------------
-     * 5. Return created course
-     * -----------------------------------------------------
-     */
 
     return {
       success: true,
@@ -303,31 +292,16 @@ export async function createCourse(data) {
       },
     };
   } catch (error) {
-    console.error("Create course error:", error);
+    console.error("Update course error:", error);
 
-    /*
-     * -----------------------------------------------------
-     * Cleanup
-     * -----------------------------------------------------
-     */
-
-    if (finalCoverPath) {
-      await deleteStorageFile(supabase, finalCoverPath);
+    // اگر کاور جدید منتقل شده ولی ادامه عملیات شکست خورده
+    if (newCoverPath && newCoverPath !== previous_cover_url) {
+      await deleteStorageFile(supabase, newCoverPath);
     }
 
-    if (cover_url && cover_url !== finalCoverPath) {
+    // اگر temp هنوز باقی مانده
+    if (cover_url && String(cover_url).startsWith("temp/")) {
       await deleteStorageFile(supabase, cover_url);
-    }
-
-    if (courseId) {
-      const { error: deleteCourseError } = await supabase
-        .from("courses")
-        .delete()
-        .eq("id", courseId);
-
-      if (deleteCourseError) {
-        console.error("Course rollback error:", deleteCourseError);
-      }
     }
 
     throw error;

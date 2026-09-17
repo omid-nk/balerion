@@ -6,6 +6,7 @@ import { LuImage, LuLoaderCircle, LuTrash2, LuUpload } from "react-icons/lu";
 import {
   deleteCourseCover,
   uploadCourseCoverTemp,
+  getCourseCoverUrl,
 } from "@/services/storage/course-covers";
 import Image from "next/image";
 
@@ -35,6 +36,23 @@ export default function FormImageUpload({
 
   useEffect(() => {
     uploadedPathRef.current = value || "";
+
+    if (!value) {
+      setPreview("");
+      previewRef.current = "";
+      return;
+    }
+
+    if (String(value).startsWith("blob:")) {
+      setPreview(value);
+      previewRef.current = value;
+      return;
+    }
+
+    const publicUrl = getCourseCoverUrl(value);
+
+    setPreview(publicUrl);
+    previewRef.current = publicUrl;
   }, [value]);
 
   useEffect(() => {
