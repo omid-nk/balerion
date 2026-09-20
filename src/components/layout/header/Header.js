@@ -75,7 +75,7 @@ export default function Header() {
         />
 
         {/* Desktop Navigation */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center justify-center gap-8 md:justify-start">
           <Logo width={140} height={100} />
 
           <HeaderDesktopNav items={headerItems} />

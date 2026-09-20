@@ -13,8 +13,8 @@ export default function HeaderDesktopNav({ items }) {
   const categoryItems = items.filter((item) => !item.mobileOnly);
 
   return (
-    <nav className="flex items-center gap-8">
-      <ul className="hidden gap-5 *:cursor-pointer md:flex">
+    <nav className="hidden items-center gap-8 md:flex">
+      <ul className="flex gap-5 *:cursor-pointer">
         {/* Categories */}
         <li
           className="relative flex items-center gap-1"

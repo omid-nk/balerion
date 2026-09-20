@@ -64,7 +64,7 @@ export const headerItems = [
     id: 9,
     label: "درباره ما",
     icon: LuAtSign,
-    href: "/about",
+    href: "/about-us",
     mobileOnly: true,
   },
 ];
