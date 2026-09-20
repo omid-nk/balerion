@@ -50,7 +50,7 @@ export default function HeroSection() {
           height={800}
           alt="hero section image"
           className="h-full object-cover"
-          loading="lazy"
+          loading="eager"
         />
         <span className="dark:bg-primary/10 bg-primary/20 absolute top-0 right-0 bottom-0 left-0 -z-10 block blur-3xl" />
       </div>

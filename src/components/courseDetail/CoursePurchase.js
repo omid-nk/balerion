@@ -69,7 +69,7 @@ export default function CoursePurchase({
 
         <AddToCartButton
           courseId={course.id}
-          isFree={isFree}
+          isFree={finalPrice === 0}
           className="bg-primary hover:bg-primary/90 flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-5 text-sm font-semibold text-white transition-colors xl:w-full"
         />
       </div>

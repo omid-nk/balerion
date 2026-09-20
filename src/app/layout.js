@@ -1,8 +1,8 @@
 import { yekan } from "@/fonts/yekan";
 import { morabba } from "@/fonts/morabba";
 import "@/styles/globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/header/Header";
+import Footer from "@/components/layout/footer/Footer";
 
 import ThemeProvider from "@/providers/ThemeProvider";
 import ToastProviders from "@/providers/ToastProviders";
