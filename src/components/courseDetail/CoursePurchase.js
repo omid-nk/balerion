@@ -9,7 +9,7 @@ export default function CoursePurchase({
   const isFree = course.price === 0;
 
   return (
-    <div className="bg-light dark:bg-dark border-border fixed inset-x-0 bottom-0 z-50 border-t p-3 xl:static xl:sticky xl:top-6 xl:mt-4 xl:rounded-lg xl:border-0 xl:p-5">
+    <div className="bg-light dark:bg-dark border-border fixed inset-x-0 bottom-0 z-50 border-t p-3 xl:sticky xl:top-6 xl:z-10 xl:mt-4 xl:rounded-lg xl:border-0 xl:p-5">
       <div className="mx-auto flex max-w-7xl items-center gap-3 xl:block">
         <div className="min-w-0 flex-1 xl:mb-5">
           {isFree ? (
