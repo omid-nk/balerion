@@ -8,6 +8,7 @@ import {
   LuPackage,
   LuSettings,
   LuMessagesSquare,
+  LuLayers,
 } from "react-icons/lu";
 
 const menuItems = [
@@ -17,6 +18,12 @@ const menuItems = [
     href: "/profile/courses",
     icon: LuPackage,
     adminOnly: true,
+  },
+  {
+    title: "دوره‌های من",
+    href: "/profile/my-courses",
+    icon: LuLayers,
+    adminOnly: false,
   },
   {
     title: "مدیریت نظرات",
