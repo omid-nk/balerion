@@ -94,7 +94,7 @@ export default function CourseCurriculum({ course, sections }) {
 
                           {/* Play Icon */}
                           <span className="bg-border/20 text-dark/50 dark:text-light/50 group-hover:bg-primary/10 group-hover:text-primary flex size-7 shrink-0 items-center justify-center rounded-md transition sm:size-8 sm:rounded-lg">
-                            <LuPlay size={12} className="sm:size-[13px]" />
+                            <LuPlay size={12} className="sm:size-3.25" />
                           </span>
 
                           {/* Lesson Info */}

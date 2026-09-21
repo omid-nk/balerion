@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-
 import { LuAlignJustify, LuUserRound, LuX } from "react-icons/lu";
 
 import Logo from "../../shared/Logo";
@@ -35,8 +34,9 @@ export default function HeaderMobileMenu({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
               onClick={onClose}
-              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-xs md:hidden"
+              className="fixed inset-0 z-40 bg-black/40 md:hidden"
             />
 
             {/* Menu */}
@@ -45,11 +45,10 @@ export default function HeaderMobileMenu({
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
+                duration: 0.22,
+                ease: "easeOut",
               }}
-              className="bg-light dark:bg-dark fixed top-0 right-0 bottom-0 z-50 flex w-[85%] max-w-sm flex-col p-5 md:hidden"
+              className="bg-light dark:bg-dark fixed top-0 right-0 bottom-0 z-50 flex w-[85%] max-w-sm flex-col p-5 will-change-transform md:hidden"
             >
               {/* Header */}
               <div className="border-border flex items-center justify-between border-b pb-4">
@@ -79,7 +78,6 @@ export default function HeaderMobileMenu({
                           className="hover:bg-primary/10 hover:text-primary flex items-center gap-3 rounded-xl px-3 py-3 transition-colors"
                         >
                           <Icon className="size-5 shrink-0" />
-
                           <span>{item.label}</span>
                         </Link>
                       </li>
