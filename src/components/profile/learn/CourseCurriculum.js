@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { LuChevronDown, LuClock3, LuPlay } from "react-icons/lu";
+import { LuChevronDown, LuArrowRight, LuClock3, LuPlay } from "react-icons/lu";
 
 export default function CourseCurriculum({ course, sections }) {
   const [openSection, setOpenSection] = useState(sections[0]?.id ?? null);
@@ -84,7 +84,7 @@ export default function CourseCurriculum({ course, sections }) {
                       section.course_lessons.map((lesson, index) => (
                         <Link
                           key={lesson.id}
-                          href={`/profile/learn/${course.slug}/${lesson.id}`}
+                          href={`/profile/learn/${course.slug}/${lesson.slug}`}
                           className="group border-border/60 flex min-w-0 items-center gap-2 border-b px-3 py-3 last:border-b-0 sm:gap-3 sm:px-5 sm:py-3.5"
                         >
                           {/* Lesson Number */}

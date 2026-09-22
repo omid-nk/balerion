@@ -12,7 +12,7 @@ export default function MyCourseCard({ item }) {
 
   return (
     <Link
-      href={`my-courses/${course.slug}`}
+      href={`/profile/learn/${course.slug}`}
       className="group flex w-full flex-col gap-3 py-5 first:pt-0 sm:flex-row sm:gap-5"
     >
       {/* Cover */}

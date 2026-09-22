@@ -46,10 +46,10 @@ export default async function LearnCoursePage({ params }) {
   return (
     <section className="space-y-5 sm:space-y-6">
       {/* Page Header */}
-      <div className="flex items-center gap-2.5 sm:gap-3">
+      <div className="flex items-center gap-3">
         <Link
           href="/profile/my-courses"
-          className="text-dark/50 dark:text-light/50 hover:text-primary flex size-8 shrink-0 items-center justify-center rounded-lg transition sm:size-9"
+          className="text-dark/40 dark:text-light/40 hover:bg-primary/10 hover:text-primary flex size-9 shrink-0 items-center justify-center rounded-xl transition"
         >
           <LuArrowRight size={17} />
         </Link>
@@ -59,7 +59,7 @@ export default async function LearnCoursePage({ params }) {
             {course.name}
           </h1>
 
-          <p className="text-dark/50 dark:text-light/50 mt-0.5 text-[10px] sm:mt-1 sm:text-xs">
+          <p className="text-dark/40 dark:text-light/40 mt-1 text-[10px] sm:text-xs">
             محیط یادگیری دوره
           </p>
         </div>
