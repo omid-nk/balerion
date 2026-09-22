@@ -6,6 +6,7 @@ import Footer from "@/components/layout/footer/Footer";
 
 import ThemeProvider from "@/providers/ThemeProvider";
 import ToastProviders from "@/providers/ToastProviders";
+import Loading from "./loading";
 
 export const metadata = {
   title: {
