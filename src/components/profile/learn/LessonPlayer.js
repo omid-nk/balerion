@@ -41,10 +41,6 @@ export default function LessonPlayer({ course, lesson, section, nextLesson }) {
               <p className="text-sm font-medium">
                 ویدئوی این درس هنوز قرار نگرفته است
               </p>
-
-              <p className="mt-2 text-[10px]">
-                این قسمت فعلاً به صورت دمو نمایش داده می‌شود
-              </p>
             </div>
           </div>
         )}
@@ -64,7 +60,7 @@ export default function LessonPlayer({ course, lesson, section, nextLesson }) {
       </div>
 
       {/* Attachment */}
-      <div className="border-border flex items-center justify-between gap-3 border-y py-4">
+      <div className="border-border flex items-center justify-between gap-3 border-y py-8">
         <div className="min-w-0">
           <p className="text-xs font-medium">فایل دوره</p>
 
@@ -78,52 +74,20 @@ export default function LessonPlayer({ course, lesson, section, nextLesson }) {
         <button
           type="button"
           disabled={!hasAttachment}
+          onClick={() => {
+            if (!lesson.attachment_path) return;
+            const link = document.createElement("a");
+            link.href = lesson.attachment_path;
+            link.download = lesson.attachment_name || "course-file";
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.click();
+          }}
           className="border-border text-dark/70 dark:text-light/70 enabled:hover:border-primary enabled:hover:text-primary flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-3 text-[10px] transition disabled:cursor-not-allowed disabled:opacity-30"
         >
-          <LuDownload size={14} />
-          <span>دانلود فایل</span>
+          {" "}
+          <LuDownload size={14} /> <span>دانلود فایل</span>{" "}
         </button>
-      </div>
-
-      {/* Complete lesson */}
-      <div className="border-border rounded-xl border p-4 sm:p-5">
-        {completed ? (
-          <div className="flex items-center gap-3">
-            <span className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-lg">
-              <LuCheck size={17} />
-            </span>
-
-            <div>
-              <p className="text-xs font-medium">این درس تکمیل شد</p>
-
-              <p className="text-dark/40 dark:text-light/40 mt-1 text-[10px]">
-                این درس به عنوان مشاهده‌شده ثبت شده است.
-              </p>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div>
-              <h2 className="text-xs font-bold sm:text-sm">
-                این درس را مشاهده کردید؟
-              </h2>
-
-              <p className="text-dark/50 dark:text-light/50 mt-1.5 text-[10px] leading-5 sm:text-xs">
-                بعد از تأیید، این درس به عنوان مشاهده‌شده ثبت می‌شود و امکان
-                بازگشت به آن وجود نخواهد داشت.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleComplete}
-              className="bg-primary hover:bg-primary/90 text-light mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-lg text-xs font-medium transition"
-            >
-              <LuCheck size={15} />
-              مشاهده کردم و تکمیل شد
-            </button>
-          </>
-        )}
       </div>
 
       {/* Navigation */}

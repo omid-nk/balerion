@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { getCourseBySlug } from "@/services/courses";
+import { getCourseBySlug } from "@/services/courses/courses";
 import { getCourseComments } from "@/services/comments";
 
 import CourseHero from "@/components/courseDetail/CourseHero";

@@ -1,6 +1,6 @@
 import CourseGrid from "@/components/course/CourseGrid";
 import CoursesPageHeader from "@/components/course/CoursesPageHeader";
-import { getCourses } from "@/services/courses";
+import { getCourses } from "@/services/courses/courses";
 
 export const metadata = {
   title: "همه دوره‌ها",

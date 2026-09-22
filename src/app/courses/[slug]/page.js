@@ -4,7 +4,10 @@ import CategoriesHeader from "@/components/course/CategoriesHeader";
 import CourseGrid from "@/components/course/CourseGrid";
 import ExpandableText from "@/components/shared/ExpandableText";
 
-import { getCategoryBySlug, getCoursesByCategory } from "@/services/courses";
+import {
+  getCategoryBySlug,
+  getCoursesByCategory,
+} from "@/services/courses/courses";
 
 export default async function CategoriesPage({ params }) {
   const { slug } = await params;
