@@ -53,12 +53,6 @@ export default function CommentsSection({
             </p>
           </div>
         </div>
-
-        {user && (
-          <span className="text-dark/50 dark:text-light/50 text-sm">
-            {total} نظر
-          </span>
-        )}
       </div>
 
       {!user ? (
