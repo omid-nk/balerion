@@ -1,204 +1,72 @@
 # Balerion
 
-Balerion is a modern online learning platform for discovering, purchasing, and managing programming courses.
+Balerion is a modern Persian e-learning platform for discovering, purchasing, and managing programming courses. The project is designed as a full-stack web application with a focus on a clean user experience, scalable structure, and practical course management.
 
-The project is built with Next.js and uses Supabase as its backend infrastructure, including authentication, PostgreSQL database, and storage. The platform includes a public course catalog, course details, user accounts, shopping cart functionality, comments, favorites, and an administrative interface for managing courses and content.
-
-> **Status:** In Development  
-> Balerion is currently under active development and is not yet a complete production-ready platform. Some features and parts of the platform are still being implemented.
-
----
+> **Status:** In active development. The project is not yet complete and new features and improvements are still being implemented.
 
 ## Overview
 
-Balerion is designed as a full-stack learning platform with a focus on a clean user experience and a structured content management system.
+The platform provides:
 
-The platform provides two main areas:
-
-- **Public platform** — course discovery, course details, authentication, shopping cart, and user interactions.
-- **Management area** — course creation and management, comment moderation, profile settings, and other administrative functionality.
-
-The application follows a modular structure so that pages, UI components, business logic, and backend-related services remain separated.
-
----
+* Course discovery and browsing
+* Course detail pages and prerequisites
+* Authentication and user profiles
+* Shopping cart
+* Course comments and moderation
+* User settings and favorites
+* Course creation and management for administrators
+* Categories and content management
+* Responsive and modern Persian UI
 
 ## Tech Stack
 
-### Frontend
+* **Next.js** — Application framework
+* **React** — UI development
+* **JavaScript** — Primary programming language
+* **Tailwind CSS** — Styling
+* **Supabase** — Backend, database, authentication and storage
+* **Tiptap** — Rich text/content editing
+* **React Icons** — Interface icons
+* **Motion** — Animations
 
-- Next.js
-- React
-- JavaScript
-- Tailwind CSS
-- Tiptap
-- Framer Motion
-- React Icons
-- React Hot Toast
+## Architecture
 
-### Backend
+The project uses the Next.js App Router and follows a modular structure:
 
-- Supabase
-- PostgreSQL
-- Supabase Auth
-- Supabase Storage
-- Row Level Security (RLS)
+```text
+src/
+├── app/          # Routes and pages
+├── components/   # Reusable UI components
+├── data/         # Static/local data
+├── fonts/        # Project fonts
+├── lib/          # Shared libraries and Supabase clients
+├── providers/    # Application providers
+├── services/     # Data and business logic
+└── styles/       # Global and component styles
+```
 
-### Development
-
-- ESLint
-- Git
-- npm
-
----
+Application routes are organized inside `src/app`, while reusable UI is separated into feature-based components such as courses, comments, cart, profile, and course details. Data access and application logic are handled through dedicated services and libraries.
 
 ## Backend
 
-Balerion does not use a separate traditional backend server. The backend infrastructure is provided by **Supabase**.
+Balerion uses **Supabase** as its backend infrastructure.
 
 Supabase is responsible for:
 
-- User authentication
-- PostgreSQL database
-- Database relationships and constraints
-- Row Level Security policies
-- Server-side data access
-- File storage
-- Database functions and triggers
+* PostgreSQL database
+* User authentication
+* User profiles and administration
+* Course and category data
+* Articles and comments
+* Storage for uploaded assets
+* Row Level Security and database functions
 
-The application communicates with Supabase through dedicated client and server utilities located in:
+The database is structured around independent entities and relationships, with administrative access handled through a dedicated `admin_users` table rather than relying only on client-side roles.
 
-```text
-src/lib/supabase/
-├── client.js
-├── server.js
-└── proxy.js
-```
+## Development
 
-This separation allows Supabase access to be handled according to the execution environment of each part of the Next.js application.
+The project is currently under active development. The existing architecture is intended to support additional course features, content management capabilities, and improvements to the overall platform as development continues.
 
 ---
 
-## Database
-
-The database is built on PostgreSQL through Supabase.
-
-The current database structure includes the following main entities:
-
-## Profiles
-
-Stores user profile information associated with Supabase Auth users.
-
-```text
-profiles
-├── id
-├── username
-├── full_name
-├── avatar_url
-├── bio
-├── phone
-├── created_at
-└── updated_at
-```
-
-The profile ID is linked directly to **auth.users**.
-
-## Admin Users
-
-Administrative access is handled separately from the normal user profile.
-
-```text
-admin_users
-├── user_id
-├── created_at
-└── created_by
-```
-
-This allows administrative permissions to be managed independently from regular profile information.
-
-## Courses
-
-Stores course information and course content.
-
-```text
-courses
-├── id
-├── name
-├── slug
-├── price
-├── discount_price
-├── cover_url
-├── short_description
-├── student_count
-├── completion_percent
-├── duration
-├── content
-├── prerequisites
-├── status
-├── created_at
-└── updated_at
-```
-
-Course content and prerequisites are stored using PostgreSQL **jsonb** fields.
-
-## Categories
-
-Course and article categories are stored separately and connected through many-to-many relationship tables.
-
-```text
-categories
-├── id
-├── name
-├── slug
-├── icon
-└── content
-```
-
-Relationship tables:
-
-```text
-course_categories
-article_categories
-```
-
-## Articles
-
-The database also contains the foundation for an article/content publishing system.
-
-```text
-articles
-├── id
-├── title
-├── slug
-├── excerpt
-├── content
-├── cover_url
-├── author_id
-├── status
-├── created_at
-└── updated_at
-```
-
-## Comments
-
-The platform includes a comment system with moderation support. Comments can be associated with courses or articles, and replies are validated against their parent content.
-
----
-
-## Security
-
-Database security is handled through Supabase Row Level Security.
-
-RLS is enabled for public tables, with database-level functions used for permission checks and administrative operations.
-
-Administrative actions are restricted to users registered in admin_users.
-
-For example, creating or removing an administrator requires an existing administrator, while an administrator cannot remove their own account from the admin list.
-
-Database triggers are also used for tasks such as:
-
-. Updating **updated_at** timestamps
-. Creating a profile after user registration
-. Validating comment relationships
-. Automatically enabling RLS on newly created public tables
-
----
+Balerion is a personal development project focused on building a complete modern e-learning platform with Next.js and Supabase.
