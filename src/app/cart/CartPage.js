@@ -1,85 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { LuShoppingCart } from "react-icons/lu";
 
-import {
-  clearCart,
-  getCart,
-  setCart,
-  subscribeToCartChanges,
-} from "@/lib/cart";
-
-import { getCartCourses } from "@/services/cart";
+import { clearCart } from "@/lib/cart";
+import { useCart } from "@/hooks/useCart";
 
 import CartItem from "@/components/cart/CartItem";
 import CartSummary from "@/components/cart/CartSummary";
 
 export default function CartPage() {
-  const [courseIds, setCourseIds] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const loadCart = useCallback(async () => {
-    const ids = getCart();
-
-    if (!ids.length) {
-      setCourseIds([]);
-      setCourses([]);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      /*
-       * Supabase نتیجه را الزاماً به همان ترتیب
-       * localStorage برنمی‌گرداند.
-       *
-       * پس ابتدا Map می‌سازیم تا هم ترتیب سبد را حفظ کنیم
-       * و هم بتوانیم IDهای نامعتبر را تشخیص بدهیم.
-       */
-      const data = await getCartCourses(ids);
-
-      const courseMap = new Map(
-        data.map((course) => [String(course.id), course]),
-      );
-
-      /*
-       * فقط دوره‌هایی که واقعاً در Supabase وجود دارند
-       * و status آن‌ها active است نگه داشته می‌شوند.
-       */
-      const validIds = ids.filter((id) => courseMap.has(String(id)));
-
-      const orderedCourses = validIds
-        .map((id) => courseMap.get(String(id)))
-        .filter(Boolean);
-
-      /*
-       * اگر بعضی IDها نامعتبر یا غیرفعال شده باشند،
-       * localStorage را هم با لیست معتبر هماهنگ می‌کنیم.
-       */
-      if (validIds.length !== ids.length) {
-        setCart(validIds);
-      }
-
-      setCourseIds(validIds);
-      setCourses(orderedCourses);
-    } catch (error) {
-      console.error("loadCart:", error);
-      setCourses([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadCart();
-
-    return subscribeToCartChanges(loadCart);
-  }, [loadCart]);
+  const { courseIds, courses, loading, reload } = useCart();
 
   function handleClear() {
     clearCart();
@@ -132,7 +63,6 @@ export default function CartPage() {
 
   return (
     <main className="pb-16 sm:pb-20">
-      {/* Header */}
       <div className="mb-5 flex items-center justify-between gap-3 sm:mb-6">
         <div className="min-w-0">
           <h1 className="text-lg font-bold sm:text-xl">سبد خرید</h1>
@@ -147,11 +77,10 @@ export default function CartPage() {
         </span>
       </div>
 
-      {/* Cart */}
       <div className="grid items-start gap-4 sm:gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
         <section className="min-w-0 space-y-3">
           {courses.map((course) => (
-            <CartItem key={course.id} course={course} onRemove={loadCart} />
+            <CartItem key={course.id} course={course} onRemove={reload} />
           ))}
         </section>
 

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
-import { getAllComments } from "@/services/comments";
+import { getAllComments } from "@/services/comments/comments";
 
 import CommentsManagement from "@/components/profile/comments/CommentsManagement";
 

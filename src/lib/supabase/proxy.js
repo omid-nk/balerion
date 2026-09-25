@@ -52,8 +52,11 @@ export async function updateSession(request) {
    * --------------------------------------------------
    */
 
-  const isProfileRoute =
-    pathname === "/profile" || pathname.startsWith("/profile/");
+  const isProtectedRoute =
+    pathname === "/profile" ||
+    pathname.startsWith("/profile/") ||
+    pathname === "/checkout" ||
+    pathname.startsWith("/checkout/");
 
   /*
    * --------------------------------------------------
@@ -95,7 +98,7 @@ export async function updateSession(request) {
    * --------------------------------------------------
    */
 
-  if (!user && isProfileRoute) {
+  if (!user && isProtectedRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

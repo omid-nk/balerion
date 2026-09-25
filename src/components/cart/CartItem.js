@@ -36,7 +36,7 @@ export default function CartItem({ course, onRemove }) {
   return (
     <article className="border-dark/10 bg-light dark:border-light/10 dark:bg-dark flex flex-col gap-4 rounded-xl border p-3 sm:flex-row sm:p-4">
       <Link
-        href={`/courses/${course.slug}`}
+        href={`/course/${course.slug}`}
         className="relative block aspect-video w-full shrink-0 overflow-hidden rounded-lg sm:w-48"
       >
         {coverUrl ? (
@@ -57,7 +57,7 @@ export default function CartItem({ course, onRemove }) {
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex items-start justify-between gap-2 sm:gap-3">
           <Link
-            href={`/courses/${course.slug}`}
+            href={`/course/${course.slug}`}
             className="hover:text-primary line-clamp-2 min-w-0 text-sm font-bold transition-colors sm:text-base"
           >
             {course.name}
