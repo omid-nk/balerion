@@ -67,7 +67,7 @@ export default function CartItem({ course, onRemove }) {
             type="button"
             onClick={handleRemove}
             aria-label="حذف دوره"
-            className="text-dark/40 hover:bg-alert/10 hover:text-alert dark:text-light/40 flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors sm:size-9"
+            className="text-dark/40 hover:bg-secondary/10 hover:text-secondary dark:text-light/40 flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors sm:size-9"
           >
             <LuTrash2 size={17} />
           </button>
@@ -94,7 +94,7 @@ export default function CartItem({ course, onRemove }) {
           <div className="flex min-w-0 flex-wrap items-center gap-2">
             {hasDiscount && (
               <>
-                <span className="bg-alert/10 text-alert rounded-md px-1.5 py-1 text-[10px] font-bold">
+                <span className="bg-secondary/10 text-secondary rounded-md px-1.5 py-1 text-[10px] font-bold">
                   {formatPrice(discountPercent)}٪ تخفیف
                 </span>
 

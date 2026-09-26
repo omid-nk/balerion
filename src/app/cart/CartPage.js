@@ -29,26 +29,8 @@ export default function CartPage() {
 
   if (!courseIds.length || !courses.length) {
     return (
-      <main className="ring-border flex min-h-80 flex-col items-center justify-center rounded-lg p-6 text-center ring select-none sm:p-12">
-        <motion.div
-          className="mb-5 sm:mb-6"
-          animate={{
-            y: [0, -5, 0],
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <div className="bg-primary/10 text-primary flex size-18 items-center justify-center rounded-2xl sm:size-20">
-            <LuShoppingCart
-              size={34}
-              strokeWidth={1.7}
-              className="sm:size-38"
-            />
-          </div>
-        </motion.div>
+      <main className="flex min-h-80 flex-col items-center justify-center rounded-lg p-6 text-center select-none sm:p-12">
+        <LuShoppingCart className="text-primary mb-4 size-16 p-1" />
 
         <h2 className="mb-2 text-base font-bold sm:text-lg">
           سبد خرید شما خالی است.

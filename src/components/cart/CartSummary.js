@@ -92,7 +92,7 @@ export default function CartSummary({ courses, onClear }) {
         <button
           type="button"
           onClick={onClear}
-          className="text-alert hover:bg-alert/10 flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-xs transition-colors"
+          className="text-secondary hover:bg-secondary/10 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3 text-xs transition-colors"
         >
           <LuTrash2 size={15} />
           حذف همه دوره‌ها
